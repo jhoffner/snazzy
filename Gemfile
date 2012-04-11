@@ -34,7 +34,9 @@ end
 # gem 'capistrano'
 
 # To use debugger
-# gem 'ruby-debug19', :require => 'ruby-debug'
+#gem 'ruby-debug19', :require => 'ruby-debug'
+gem 'ruby-debug19', :require => false
+gem 'ruby-debug-base19', :git => 'https://github.com/tribune/ruby-debug-base19.git', :require => false
 
 gem "mongoid", "~> 2.4"
 gem "bson_ext", "~> 1.6"
@@ -44,3 +46,6 @@ gem "fabrication"
 gem "jquery-rails"
 gem "slim-rails"
 gem "compass-rails", :group => :assets
+#gem "compass_twitter_bootstrap"
+
+gem "devise"

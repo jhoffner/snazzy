@@ -1,10 +1,27 @@
-! doctype 5
+doctype 5
 html
   head
     = csrf_meta_tag
     /![if lt IE 9]
       = javascript_include_tag 'html5'
     /![endif]
+    = stylesheet_link_tag 'application'
+
   body
-    = yield
+    .container
+      .row
+        .span12
+          #nav_bar.navbar
+            .navbar-inner
+              .container
+                /a.brand[href='/'] BrandName
+                .nav-collapse
+                  ul.nav
+                    li.active
+                      a[href='/'] Home
+
+          = yield
+
+
+
     = javascript_include_tag 'application'

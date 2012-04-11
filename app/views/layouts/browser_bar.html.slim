@@ -1,0 +1,15 @@
+doctype 5
+html
+  head
+    = csrf_meta_tag
+    /![if lt IE 9]
+      = javascript_include_tag 'html5'
+    /![endif]
+    = stylesheet_link_tag 'screen'
+  body
+    .container
+      .row
+        .span12
+          = yield
+
+    = javascript_include_tag 'application'
