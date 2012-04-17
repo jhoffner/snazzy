@@ -1,0 +1,11 @@
+
+= form_for(resource, :as => resource_name, :url => confirmation_path(resource_name), :html => { method: :post, class: 'form-horizontal' }) do |f|
+  fieldset
+    legend Resend Confirmation Instructions
+
+    = f.control_group :email do
+      = f.email_field :email
+
+    .form-actions
+      = f.submit_btn "Resend Confirmation Instructions"
+      p: p = render "links"

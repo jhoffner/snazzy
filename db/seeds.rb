@@ -11,5 +11,7 @@ User.create(
     last_name: "doe",
     email: "jon.doe@gmail.com",
     password: "password",
-    login: "jon_doe"
+    username: "jon_doe",
+    user_type: 's',
+    fb_uid: "jondoefbuid" # not a valid id but it should still validate
 )

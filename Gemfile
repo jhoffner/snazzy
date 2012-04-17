@@ -37,6 +37,7 @@ end
 #gem 'ruby-debug19', :require => 'ruby-debug'
 gem 'ruby-debug19', :require => false
 gem 'ruby-debug-base19', :git => 'https://github.com/tribune/ruby-debug-base19.git', :require => false
+#gem 'rails-footnotes', '>= 3.7.5.rc4', :group => :development
 
 gem "mongoid", "~> 2.4"
 gem "bson_ext", "~> 1.6"
@@ -48,4 +49,15 @@ gem "slim-rails"
 gem "compass-rails", :group => :assets
 #gem "compass_twitter_bootstrap"
 
-gem "devise"
+gem "omniauth"
+#gem "devise"
+gem "omniauth-facebook"
+gem "omniauth-pinterest"
+#gem "omniauth-twitter"
+
+gem 'koala'
+
+gem 'decent_exposure'
+#gem 'warden'
+#gem "sendgrid"
+#gem "twitter_bootstrap_form_for"

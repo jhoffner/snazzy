@@ -1,0 +1,13 @@
+= form_for(resource, :as => resource_name, :url => password_path(resource_name), :html => { :method => :put , :class => "form-horizontal"}) do |f|
+  fieldset
+    legend Change Your Password
+    = f.hidden_field :reset_password_token
+    = f.control_group :password do
+      = f.password_field :password
+
+    = f.control_group :password_confirmation, label_text: "Confirm new password" do
+      = f.password_field :password_confirmation
+
+    .form-actions
+      = f.submit_btn "Change my password"
+      p: p = render "links"

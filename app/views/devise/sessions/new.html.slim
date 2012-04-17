@@ -1,0 +1,27 @@
+
+= form_for(resource, :as => resource_name, :url => session_path(resource_name),:html => {class: "form-search"}) do |f|
+  fieldset
+    legend Sign In
+    .row
+      .span4
+        = f.control_group :email do
+          = f.email_field :email, class: 'span4'
+
+        = f.control_group :password do
+          = f.password_field :password, class: 'span4'
+
+        - if devise_mapping.rememberable?
+          = f.control_group :remember_me do
+            = f.check_box :remember_me
+
+        .form-actions
+          = f.submit_btn "Sign in"
+          p: p = render "links"
+
+      .span4.offset2
+        h4 You can also sign in using Facebook:
+        p: p
+          fb:login-button(data-show-faces="true" data-width="300" data-max-rows="4")
+
+
+

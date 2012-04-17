@@ -1,0 +1,1 @@
+#Mongoid.parameterize_keys = false

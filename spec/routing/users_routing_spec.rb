@@ -1,6 +1,6 @@
 require "spec_helper"
 
-describe UsersController do
+describe UserController do
   describe "routing" do
 
     it "routes to #index" do

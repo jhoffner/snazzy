@@ -1,0 +1,11 @@
+= form_for(resource, :as => resource_name, :url => password_path(resource_name), :html => { :method => :post, :class => 'form-horizontal' }) do |f|
+  fieldset
+    legend Forgot Your Password?
+
+    = f.control_group :email do
+      = f.email_field :email
+
+    .form-actions
+      = f.submit_btn "Send me reset password instructions"
+      p: p = render "links"
+

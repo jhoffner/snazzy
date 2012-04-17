@@ -7,4 +7,11 @@
 @import "bootstrap/bootstrap.scss";
 @import "partials/bootstrap_fixes";
 
+@import "partials/mixins";
+
+#shell {margin-top:20px;}
+
+@import "partials/devise";
+@import "partials/form";
+
 

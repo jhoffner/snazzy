@@ -1,0 +1,20 @@
+#nav_bar.navbar
+  .navbar-inner
+    .container
+      a.brand[href='/'] Snazzy Room
+      .nav-collapse
+        ul.nav
+          li.active
+            a[href='/'] Home
+
+        ul.nav.pull-right
+          - if authenticated?
+            li
+              = link_to current_user_full_name, profile_path
+            li
+              = link_to "Logout", signout_path
+          - else
+            li
+              = link_to "Login With Facebook", '/auth/facebook'
+
+

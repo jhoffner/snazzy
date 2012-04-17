@@ -1,0 +1,30 @@
+
+= form_for(resource, :as => resource_name, :url => registration_path(resource_name), :html => {class: "form-horizontal well"}) do |f|
+  fieldset
+    legend Sign Up
+    / = devise_error_messages!
+    .row
+      .span6
+        = f.control_group :username, label_text: 'User Name' do
+          = f.text_field :username, class:"span4"
+
+        = f.control_group :first_name, label_text: 'First Name' do
+          = f.text_field :first_name, class:"span4"
+
+        = f.control_group :last_name, label_text: 'Last Name' do
+          = f.text_field :last_name, class:"span4"
+
+        = f.control_group :email do
+          = f.email_field :email, class:"span4"
+
+        = f.control_group :password do
+          = f.password_field :password, class:"span4"
+
+        = f.control_group :password_confirmation, label_text: 'Password Confirm' do
+          = f.password_field :password_confirmation, class:"span4"
+
+    .form-actions
+      = f.submit_btn "Sign up"
+      p: p = render "links"
+
+= link_to 'Confirm my account', confirmation_url(resource, :confirmation_token => '234325')

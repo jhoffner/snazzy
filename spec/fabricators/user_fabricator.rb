@@ -1,7 +1,7 @@
 Fabricator(:user) do
-  login "MyString"
-  first_name "MyString"
-  last_name "MyString"
-  email "MyString"
-  password "MyString"
+  login "joe_smith"
+  first_name "joe"
+  last_name "smith"
+  email "joe@gmail.com"
+  password "password"
 end

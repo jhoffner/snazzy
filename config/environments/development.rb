@@ -16,6 +16,15 @@ Snazzy::Application.configure do
   # Don't care if the mailer can't send
   config.action_mailer.raise_delivery_errors = false
 
+  # ActionMailer Config
+  config.action_mailer.default_url_options = { :host => 'smtp.sendgrid.net:587' }
+
+  # A dummy setup for development - no deliveries, but logged
+  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.perform_deliveries = false
+  config.action_mailer.raise_delivery_errors = true
+  config.action_mailer.default :charset => "utf-8"
+
   # Print deprecation notices to the Rails logger
   config.active_support.deprecation = :log
 
@@ -28,4 +37,9 @@ Snazzy::Application.configure do
 
   # Expands the lines which load the assets
   config.assets.debug = true
+
+  config.facebook = {
+      app_id: '380464938651688',
+      app_secret: '62cb8916ee287943fa55da681dfb7d7a'
+  }
 end

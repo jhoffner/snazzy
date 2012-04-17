@@ -8,20 +8,21 @@ html
     = stylesheet_link_tag 'application'
 
   body
-    .container
+    = render 'layouts/navbar'
+    #shell.container
       .row
         .span12
-          #nav_bar.navbar
-            .navbar-inner
-              .container
-                /a.brand[href='/'] BrandName
-                .nav-collapse
-                  ul.nav
-                    li.active
-                      a[href='/'] Home
+          - if flash[:notice]
+            .alert.alert-info.flash-msg.notice
+              = flash[:notice]
+          - if flash[:warning]
+            .alert.alert-warning.flash-msg.warning
+              = flash[:warning]
+          - if flash[:error]
+            .alert.alert-error.flash-msg.error
+              = flash[:error]
 
           = yield
 
-
-
     = javascript_include_tag 'application'
+    /= render "layouts/facebook"
