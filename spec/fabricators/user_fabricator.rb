@@ -1,7 +1,8 @@
 Fabricator(:user) do
-  login "joe_smith"
+  key = rand(5000)
+  username "joe_smith#{key}"
   first_name "joe"
   last_name "smith"
-  email "joe@gmail.com"
-  password "password"
+  email "joe#{key}@gmail.com"
+  fb_uid "joesmithfbuid#{key}"
 end

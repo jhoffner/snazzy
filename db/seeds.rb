@@ -6,12 +6,51 @@
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 
-User.create(
+Mongoid.master.collections.select {|c| c.name !~ /system/ }.each(&:drop)
+
+User.create_indexes
+
+user1 = User.create(
     first_name: "jon",
     last_name: "doe",
     email: "jon.doe@gmail.com",
-    password: "password",
     username: "jon_doe",
     user_type: 's',
-    fb_uid: "jondoefbuid" # not a valid id but it should still validate
+    fb_uid: "jondoefbuid" # not a valid id but it should still validate for now
 )
+
+DressingRoom.create_indexes
+DressingRoomItem.create_indexes
+
+dr1 = user1.dressing_rooms.create({
+    label: 'wishlist',
+    items: [
+        {
+            name: "test item 1",
+            url: "http://www.test.com",
+            image_url: "http://www.test.com/image.png"
+        },
+        {
+            name: "test item 2",
+            url: "http://www.test.com",
+            image_url: "http://www.test.com/image2.png"
+        }
+    ]
+})
+
+Outfit.create_indexes
+OutfitItem.create_indexes
+
+outfit1 = dr1.outfits.build({
+  label: 'test outfit 1',
+  items: [
+      {
+          dressing_room_item_id: dr1.items.first.id
+      },
+      {
+          dressing_room_item_id: dr1.items.last.id
+      }
+  ]
+})
+
+dr1.save!

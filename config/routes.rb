@@ -1,13 +1,13 @@
 Snazzy::Application.routes.draw do
   get "session/create"
 
-  get "session/new"
+  get "session/new", as: :new_session
 
   get "session/destroy"
 
   get "session/failure"
 
-  get "session/facebook"
+  get "session/facebook", as: :facebook_signin
 
   #devise_for :users
   match '/auth/:provider/callback' => 'session#create'
@@ -22,7 +22,7 @@ Snazzy::Application.routes.draw do
 
   match '/user' => 'user#index'
   match '/profile' => 'user#index'
-  resources :user, :only => [ :show, :edit, :update ]
+  resources :user, :only => [ :show, :edit, :update, :destroy ]
 
   get "welcome/index"
 

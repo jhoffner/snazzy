@@ -1,8 +1,6 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery
 
-  attr_accessor :presenter
-
   ### authentication:
   helper_method :authenticated?, :current_user, :current_user_id, :current_username, :admin_user?
 
@@ -22,7 +20,7 @@ class ApplicationController < ActionController::Base
     else
       session[:return_to] = request.original_url
       flash[:warning] = "You must be logged in as an admin to perform this action"
-      redirect_to controller: :session, action: :new
+      redirect_to new_session_path
     end
 
   end

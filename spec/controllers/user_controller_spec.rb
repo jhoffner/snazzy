@@ -24,140 +24,118 @@ describe UserController do
   # User. As you add validations to User, be sure to
   # update the return value of this method accordingly.
   def valid_attributes
-    {}
-  end
-  
-  # This should return the minimal set of values that should be in the session
-  # in order to pass any filters (e.g. authentication) defined in
-  # UsersController. Be sure to keep this updated too.
-  def valid_session
-    {}
+    {
+        username: 'unique_user',
+        first_name: 'test',
+        last_name: 'user',
+        email: 'testuser@test.com',
+        fb_uid: 'testfbid'
+    }
   end
 
   describe "GET index" do
-    it "assigns all users as @users" do
-      user = User.create! valid_attributes
+    it "handles the current logged in user and assigns them as user" do
       get :index, {}, valid_session
-      assigns(:user).should eq([user])
+      controller.user.should eq existing_user
+    end
+
+    it "redirects if the user is not logged in" do
+      get :index
+      response.should redirect_to new_session_path
     end
   end
 
   describe "GET show" do
-    it "assigns the requested user as @user" do
-      user = User.create! valid_attributes
-      get :show, {:id => user.to_param}, valid_session
-      assigns(:user).should eq(user)
-    end
-  end
-
-  describe "GET new" do
-    it "assigns a new user as @user" do
-      get :new, {}, valid_session
-      assigns(:user).should be_a_new(User)
+    it "assigns the requested user as user" do
+      get :show, {:id => existing_user.to_param}, valid_session
+      controller.user.should eq existing_user
     end
   end
 
   describe "GET edit" do
-    it "assigns the requested user as @user" do
-      user = User.create! valid_attributes
-      get :edit, {:id => user.to_param}, valid_session
-      assigns(:user).should eq(user)
-    end
-  end
-
-  describe "POST create" do
-    describe "with valid params" do
-      it "creates a new User" do
-        expect {
-          post :create, {:user => valid_attributes}, valid_session
-        }.to change(User, :count).by(1)
-      end
-
-      it "assigns a newly created user as @user" do
-        post :create, {:user => valid_attributes}, valid_session
-        assigns(:user).should be_a(User)
-        assigns(:user).should be_persisted
-      end
-
-      it "redirects to the created user" do
-        post :create, {:user => valid_attributes}, valid_session
-        response.should redirect_to(User.last)
-      end
+    it "assigns the requested user as user" do
+      get :edit, {:id => existing_user.to_param}, valid_session
+      controller.user.should eq existing_user
     end
 
-    describe "with invalid params" do
-      it "assigns a newly created but unsaved user as @user" do
-        # Trigger the behavior that occurs when invalid params are submitted
-        User.any_instance.stub(:save).and_return(false)
-        post :create, {:user => {}}, valid_session
-        assigns(:user).should be_a_new(User)
-      end
-
-      it "re-renders the 'new' template" do
-        # Trigger the behavior that occurs when invalid params are submitted
-        User.any_instance.stub(:save).and_return(false)
-        post :create, {:user => {}}, valid_session
-        response.should render_template("new")
-      end
+    it "assigns a presenter instance" do
+      get :edit, {:id => existing_user.to_param}, valid_session
+      assigns(:presenter).user.should eq existing_user
     end
   end
 
   describe "PUT update" do
     describe "with valid params" do
-      it "updates the requested user" do
-        user = User.create! valid_attributes
-        # Assuming there are no other users in the database, this
-        # specifies that the User created on the previous line
-        # receives the :update_attributes message with whatever params are
-        # submitted in the request.
-        User.any_instance.should_receive(:update_attributes).with({'these' => 'params'})
-        put :update, {:id => user.to_param, :user => {'these' => 'params'}}, valid_session
+      before do
+        @update_attrs = {
+            first_name: 'name2'
+        }
+
+        put :update, {:id => existing_user.to_param, :user => @update_attrs}, valid_session
       end
 
-      it "assigns the requested user as @user" do
-        user = User.create! valid_attributes
-        put :update, {:id => user.to_param, :user => valid_attributes}, valid_session
-        assigns(:user).should eq(user)
+      it "updates the requested user" do
+        controller.user.first_name.should eq @update_attrs[:first_name]
+      end
+
+      it "assigns the requested user as user" do
+        controller.user.username.should eq existing_user.username
       end
 
       it "redirects to the user" do
-        user = User.create! valid_attributes
-        put :update, {:id => user.to_param, :user => valid_attributes}, valid_session
-        response.should redirect_to(user)
+        response.should redirect_to(existing_user)
       end
     end
 
     describe "with invalid params" do
-      it "assigns the user as @user" do
-        user = User.create! valid_attributes
+      before do
+        existing_user.stub(:save).and_return(false)
+
         # Trigger the behavior that occurs when invalid params are submitted
         User.any_instance.stub(:save).and_return(false)
-        put :update, {:id => user.to_param, :user => {}}, valid_session
-        assigns(:user).should eq(user)
+        put :update, {:id => existing_user.to_param, :user => {email: nil}}, valid_session
+      end
+
+      it "assigns the user as user" do
+        controller.user.should eq existing_user
       end
 
       it "re-renders the 'edit' template" do
-        user = User.create! valid_attributes
-        # Trigger the behavior that occurs when invalid params are submitted
-        User.any_instance.stub(:save).and_return(false)
-        put :update, {:id => user.to_param, :user => {}}, valid_session
-        response.should render_template("edit")
+        response.should render_template "edit"
       end
     end
   end
 
   describe "DELETE destroy" do
-    it "destroys the requested user" do
-      user = User.create! valid_attributes
+
+    it "destroys the current user" do
       expect {
-        delete :destroy, {:id => user.to_param}, valid_session
+        delete :destroy, {:id => existing_user.to_param}, valid_session
       }.to change(User, :count).by(-1)
     end
 
-    it "redirects to the users list" do
-      user = User.create! valid_attributes
-      delete :destroy, {:id => user.to_param}, valid_session
-      response.should redirect_to(users_url)
+    it "fails to destroy another user because the current user is not an admin" do
+      delete :destroy, {:id => "some other id"}, valid_session
+      response.should render_template "shared/no_access"
+    end
+
+    it "is able to destroy another user because the current user is an admin" do
+      existing_user.user_type = User::ADMIN_USER
+
+      existing_count = User.count
+
+      other_user = User.create!(valid_attributes)
+
+      User.count.should eq(existing_count+1)
+
+      expect {
+        delete :destroy, {:id => other_user.to_param}, valid_session
+      }.to change(User, :count).by(-1)
+    end
+
+    it "redirects to the root" do
+      delete :destroy, {:id => existing_user.to_param}, valid_session
+      response.should redirect_to :root
     end
   end
 

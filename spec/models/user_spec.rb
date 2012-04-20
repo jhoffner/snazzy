@@ -2,68 +2,43 @@ require 'spec_helper'
 
 describe User do
   let(:new_user) { User.new }
-  let(:existing_user) {User.first}
-  let :valid_user do
-    User.new(
-        first_name: "jane",
-        last_name: "doe",
-        email: "jane.doe@gmail.com",
-        password: "password",
-        username: "jane_doe",
-        fb_uid: "testid"
-    )
-  end
+  let(:existing_user) { User.first }
+  let(:valid_user) { Fabricate :user }
 
-  describe "valid fields" do
+  valid_email = "valid@email.com"
+
+  describe "field validations" do
     it "fails without a user name" do
+      test_validates_presence_of(new_user, :username, "unique_user_name")
+    end
 
-      #new user should be invalid because user name and first/last name fields are blank
-      new_user.user_name.blank?.should be_true
-      new_user.invalid?.should be_true
-
-      new_user.errors.should have_key :username
-
-      valid_user.user_name.blank?.should be_false
-      valid_user.valid?.should be_true
-
-      existing_user.valid?.should be_true
+    it "fails without a unique username" do
+      test_validates_uniqueness_of(existing_user, valid_user, :username)
     end
 
     it "fails without first and last name fields" do
-      new_user.first_name.should be_nil
-      new_user.last_name.should be_nil
-
-      new_user.invalid?.should be_true
-      new_user.errors.should have_key :first_name
-      new_user.errors.should have_key :last_name
+      test_validates_presence_of(new_user, :first_name, "first")
+      test_validates_presence_of(new_user, :last_name, "last")
     end
 
-    it "fails without a valid email address" do
-      new_user.email.should be_empty
-      new_user.invalid?.should be_true
-      new_user.errors.should have_key :email
+    it "fails without a email address" do
+      test_validates_presence_of(new_user, :email, valid_email)
+    end
 
-      new_user.email = "invalid email"
-      new_user.invalid?.should be_true
-      new_user.errors.should have_key :email
+    it "fails without a valid formatted email address" do
+      test_validates_format_of(new_user, :email, "invalid email", valid_email)
+    end
 
-      new_user.email = "valid@email.com"
-      new_user.invalid?.should be_true
-      new_user.errors.should_not have_key :email
+    it "fails without a unique email address" do
+      test_validates_uniqueness_of(existing_user, valid_user, :email)
+    end
+
+    it "fails without a unique fb uid" do
+      test_validates_uniqueness_of(existing_user, valid_user, :fb_uid)
     end
 
     it "fails without a valid gender unless gender is not specified" do
-      new_user.gender.should be_nil
-      new_user.invalid?.should be_true
-      new_user.errors.should_not have_key :gender
-
-      new_user.gender = 'x'
-      new_user.invalid?.should be_true
-      new_user.errors.should have_key :gender
-
-      new_user.gender = 'f'
-      new_user.invalid?.should be_true
-      new_user.errors.should_not have_key :gender
+      test_validates_inclusion_of(new_user, :gender, ['x'], [nil, 'm', 'f'])
     end
     #it "fails with a missing password unless a fb id is present" do
     #  new_user.password.should be_nil

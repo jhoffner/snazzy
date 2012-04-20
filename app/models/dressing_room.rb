@@ -1,38 +1,32 @@
 class DressingRoom
   include Mongoid::Document
+  include Mongoid::Timestamps::Created
+  include Mongoid::Paranoia
+  include DocumentComponents::FriendlyUrlName
 
   #### relationships:
 
   belongs_to :user
-  embeds_many :dressing_room_items
 
-  #### fields:
-
-  field :name,          type: String
-  field :created_on,    type: Time,   default: -> {Time.now}
+  embeds_many :outfits
+  embeds_many :items, class_name: 'DressingRoomItem', inverse_of: :dressing_room
 
   #### validations:
+  validates_presence_of :name, :label, :user_id
+  #validates_uniqueness_of :name, scope: [:user_id], case_sensitive: false
 
-  validates_presence_of :name
+  #### indexes:
+
+  index [[:user_id, Mongo::ASCENDING], [:name, Mongo::ASCENDING]], unique: true
+
 end
 
 class DressingRoomItem
   include Mongoid::Document
-  include RegexHelper
+  include Mongoid::Paranoia
+  include DocumentComponents::WebLink
 
   #### relationships:
 
   embedded_in :dressing_room
-
-  #### fields:
-
-  field :name,          type: String
-  field :url,           type: String
-  field :image_url,     type: String
-  field :description,   type: String
-  field :price,         type: Float
-
-  #### validations:
-
-  validates_presence_of :url, :image_url
 end
