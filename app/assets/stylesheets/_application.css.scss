@@ -1,0 +1,14 @@
+@import "bootstrap/responsive.scss";
+@import "bootstrap/bootstrap.scss";
+@import "common/bootstrap_fixes";
+@import "common/mixins";
+
+#shell {margin-top:20px;}
+
+//@import "common/devise";
+@import "common/navbar";
+@import "common/form";
+
+@import "controllers/home";
+@import "controllers/user";
+@import "controllers/session";

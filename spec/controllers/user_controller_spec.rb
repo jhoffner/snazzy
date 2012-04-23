@@ -116,7 +116,7 @@ describe UserController do
 
     it "fails to destroy another user because the current user is not an admin" do
       delete :destroy, {:id => "some other id"}, valid_session
-      response.should render_template "shared/no_access"
+      response.should render_template "common/no_access"
     end
 
     it "is able to destroy another user because the current user is an admin" do

@@ -1,4 +1,4 @@
-module DocumentComponents
+module ModelMixins
   module WebLink
     extend ActiveSupport::Concern
 
@@ -10,6 +10,7 @@ module DocumentComponents
       field :image_url,     type: String
       field :description,   type: String
       field :price,         type: Float
+      field :tags,          type: String
 
       #### validations:
 

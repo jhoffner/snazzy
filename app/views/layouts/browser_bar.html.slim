@@ -5,8 +5,8 @@ html
     /![if lt IE 9]
       = javascript_include_tag 'html5'
     /![endif]
-    = stylesheet_link_tag 'screen'
-  body
+    = stylesheet_link_tag 'application'
+  body[id=controller_name class="#{action_name}_action"]
     .container
       .row
         .span12

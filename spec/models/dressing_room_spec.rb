@@ -48,6 +48,7 @@ describe DressingRoom do
 
       item.name.should eq 'test-name'
     end
+
   end
 
   describe "valid fields" do

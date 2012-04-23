@@ -3,7 +3,7 @@ require 'spec_helper'
 describe User do
   let(:new_user) { User.new }
   let(:existing_user) { User.first }
-  let(:valid_user) { Fabricate :user }
+  let(:valid_user) { Fabricate.build :user }
 
   valid_email = "valid@email.com"
 
@@ -49,5 +49,26 @@ describe User do
     #  new_user.invalid?.should be_true
     #  new_user.errors.should_not have_key :password
     #end
+  end
+
+  describe "facebook integration" do
+
+    before do
+      new_user.fb_profile = {
+        "username" => 'fbusername',
+        "first_name" => 'fb_first',
+        "last_name" => 'fb_last',
+        "birthday" => '05/08/1980',
+        "id" => 'fbprofiletestid',
+        "email" => 'test@facebook.com'
+      }
+    end
+
+    it "should be able to create a new user from the profile" do
+      User.stub(:new).and_return(new_user)
+
+      user = User.create_from_facebook('fakeaccesstoken')
+      user.new?.should_not be_true
+    end
   end
 end

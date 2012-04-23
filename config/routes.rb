@@ -18,13 +18,13 @@ Snazzy::Application.routes.draw do
 
   match '/auth/failure' => 'session#failure'
 
-  get "home/index"
+  get "home" => 'home#index'
 
   match '/user' => 'user#index'
   match '/profile' => 'user#index'
-  resources :user, :only => [ :show, :edit, :update, :destroy ]
-
-  get "welcome/index"
+  resources :user, :only => [ :show, :edit, :update, :destroy ] do
+    resources :dressing_rooms
+  end
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
@@ -69,13 +69,13 @@ Snazzy::Application.routes.draw do
   # Sample resource route within a namespace:
   #   namespace :admin do
   #     # Directs /admin/products/* to Admin::ProductsController
-  #     # (app/controllers/admin/products_controller.rb)
+  #     # (controllers/controllers/admin/products_controller.rb)
   #     resources :products
   #   end
 
   # You can have the root of your site routed with "root"
   # just remember to delete public/index.html.
-  root :to => 'welcome#index'
+  root :to => 'home#index'
 
   # See how all your routes lay out with "rake routes"
 

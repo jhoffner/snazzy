@@ -3,9 +3,10 @@ class User
   include Mongoid::Timestamps::Created
   include Mongoid::Timestamps::Updated
 
-  extend User::Queries
-  extend User::FacebookHelpers
-  extend User::Commands
+  include User::Queries
+  include User::FacebookHelpers
+  include User::Commands
+  include User::CallbackHandlers
 
   #### consts:
 
@@ -14,7 +15,10 @@ class User
 
   #### relationships:
 
-  has_many :dressing_rooms
+  has_many :dressing_rooms, dependent: :delete, autosave: true
+  has_many :outfits, dependent: :delete
+
+  has_one :last_used_dressing_room, class_name: "DressingRoom"
 
   ##### fields:
 

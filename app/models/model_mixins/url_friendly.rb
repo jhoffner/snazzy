@@ -1,8 +1,9 @@
-module DocumentComponents
-  module FriendlyUrlName
+module ModelMixins
+  module UrlFriendly
     extend ActiveSupport::Concern
 
     included do
+
       #### fields:
 
       field :label,         type: String
@@ -12,8 +13,12 @@ module DocumentComponents
 
       def label=(value)
         self[:label] = value
-        self[:name] = value.parameterize
+        self[:name] = value.parameterize.downcase
       end
+
+      #### validations:
+      validates_presence_of :name, :label
+
     end
   end
 end

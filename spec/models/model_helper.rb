@@ -1,18 +1,11 @@
 module Snazzy
   module ModelHelper
     def test_validates_uniqueness_of(existing_record, new_record, field)
-      new_record.valid?.should be_true
+      valid_value = new_record.send field
+      invalid_value = existing_record.send field
 
-      original_val = new_record.send field
-      new_val = existing_record.send field
-      new_record.set_attr field, new_val
-
-      new_record.invalid?.should be_true
-
-      new_record.errors.should have_key field
-
-      new_record.set_attr field, original_val
-      new_record.valid?.should be_true
+      test_valid_value(new_record, field, valid_value)
+      test_invalid_value(new_record, field, invalid_value)
     end
 
     def test_validates_presence_of(record, field, valid_value)
