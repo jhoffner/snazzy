@@ -1,5 +1,5 @@
 module ModelMixins
-  module UrlFriendly
+  module Slug
     extend ActiveSupport::Concern
 
     included do
@@ -7,18 +7,21 @@ module ModelMixins
       #### fields:
 
       field :label,         type: String
-      field :name,          type: String
+      field :slug,          type: String
 
       #### field overrides:
 
       def label=(value)
         self[:label] = value
-        self[:name] = value.parameterize.downcase
+        self[:slug] = value.to_slug
       end
 
       #### validations:
-      validates_presence_of :name, :label
+      validates_presence_of :slug, :label
 
+      #### scopes:
+
+      scope :slug, lambda {|slug| where(slug: slug) }
     end
   end
 end

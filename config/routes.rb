@@ -1,4 +1,6 @@
 Snazzy::Application.routes.draw do
+  get "user/settings"
+
   get "session/create"
 
   get "session/new", as: :new_session
@@ -18,13 +20,27 @@ Snazzy::Application.routes.draw do
 
   match '/auth/failure' => 'session#failure'
 
-  get "home" => 'home#index'
-
-  match '/user' => 'user#index'
-  match '/profile' => 'user#index'
-  resources :user, :only => [ :show, :edit, :update, :destroy ] do
-    resources :dressing_rooms
+  scope controller: :home do
+    get "home" => :index
+    get "landing" => :landing
   end
+
+  scope controller: :user do
+    get "settings" => :settings
+  end
+
+  #resources :user, :only => [ :show, :edit, :update, :destroy ]
+
+  scope controller: :dressing_rooms do
+    get ":username" => :index, as: :dressing_rooms
+
+    scope path: ":username" do
+      get ":slug" => :show, as: :dressing_room
+    end
+  end
+
+  #get "/user/:username/rooms/:slug" => "dressing_rooms#show", as: :dressing_room
+  #post "/user/:username/rooms" => "dressing_rooms#create", as: :create_dressing_room
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

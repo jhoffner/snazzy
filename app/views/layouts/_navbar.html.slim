@@ -10,7 +10,7 @@
         ul.nav.pull-right
           - if authenticated?
             li
-              = link_to current_user_full_name, profile_path
+              = link_to current_user_full_name, dressing_rooms_path(current_username)
             li
               = link_to "Logout", signout_path
           - else

@@ -11,4 +11,9 @@
 // GO AFTER THE REQUIRES BELOW.
 //
 //= require jquery
+//= require underscore
+//= require can/can.jquery
+//= require can/plugins/can.construct.proxy
+//= require can/plugins/can.construct.super
+//= require can/plugins/can.control.plugin
 //= require_tree .

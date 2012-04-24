@@ -2,6 +2,10 @@ class User
   module Queries
     extend ActiveSupport::Concern
 
+    #included do
+    #  scope :find_by_username,
+    #end
+
     module ClassMethods
       def find_by_username(username)
         User.where(username: username).first

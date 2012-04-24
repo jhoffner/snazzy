@@ -3,11 +3,11 @@ class Outfit
     extend ActiveSupport::Concern
 
     module ClassMethods
-      def find_by_name(username, dressing_room_name, name)
+      def find_by_slug(username, dressing_room_slug, slug)
         Outfit.where(
           username: username,
-          dressing_room_name: dressing_room_name,
-          name: name
+          dressing_room_slug: dressing_room_slug,
+          slug: slug
         ).first
       end
     end

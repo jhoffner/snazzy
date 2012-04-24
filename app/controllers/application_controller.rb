@@ -1,9 +1,47 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery
 
+  expose :user do
+    id_or_username = params[:user_id] || params[:username]
+    case id_or_username
+      # if the id/username is for the current user, or the id is not provided then use the current user
+      when current_user_id, current_username, nil
+        current_user
+      else
+        User.find_by_id_or_username(id_or_username)
+    end
+  end
+
   ### authentication:
   helper_method :authenticated?, :current_user, :current_user_id, :current_username, :admin_user?
 
+  def current_user?
+    id_or_username = params[:user_id] || params[:username]
+    case id_or_username
+      # if the id/username is for the current user, or the id is not provided then use the current user
+      when current_user_id, current_username, nil
+        true
+      else
+        false
+    end
+  end
+
+  private
+
+  # ensures that the user has permission to see the resource.
+  def check_user_access
+    if current_user? || admin_user?
+      true
+    elsif user.nil?
+      render_404
+      false
+    else
+      render_no_access
+      false
+    end
+  end
+
+  # ensures that the user is authenticated
   def authenticate_user!
     if authenticated?
       true
@@ -74,8 +112,14 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  def render_no_access(model_name)
-    @model_name = model_name
+  def render_404
+    respond_to do |format|
+      format.html { render "shared/404" }
+      format.json { render json: {error: "resource not found"} }
+    end
+  end
+
+  def render_no_access()
     respond_to do |format|
       format.html { render "shared/no_access" }
       format.json { render json: {error: "access denied"} }

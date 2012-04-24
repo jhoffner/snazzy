@@ -16,6 +16,7 @@ class User
   #### relationships:
 
   has_many :dressing_rooms, dependent: :delete, autosave: true
+
   has_many :outfits, dependent: :delete
 
   has_one :last_used_dressing_room, class_name: "DressingRoom"
@@ -153,6 +154,14 @@ class User
         gender = 'm'
       when 'female'
         gender = 'f'
+    end
+  end
+
+  def full_name
+    if !first_name.blank? and !last_name.blank?
+      "#{first_name} #{last_name}"
+    else
+      first_name.blank? ? last_name : first_name
     end
   end
 

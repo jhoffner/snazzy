@@ -24,6 +24,10 @@ module ModelMixins
       #### validations:
       validates_presence_of :username, :user_id
 
+
+      #### scopes:
+      scope :username, lambda { |username| where(username: username) }
+
     end
 
     #def user=(value)

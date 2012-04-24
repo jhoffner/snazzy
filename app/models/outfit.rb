@@ -1,7 +1,7 @@
 class Outfit
   include Mongoid::Document
   include Mongoid::Timestamps::Created
-  include ModelMixins::UrlFriendly
+  include ModelMixins::Slug
   include ModelMixins::UserDependant
   include ModelMixins::DressingRoomDependant
 
@@ -17,7 +17,7 @@ class Outfit
 
   #### validations:
 
-  validates_uniqueness_of :name, scope:[:dressing_room_id], case_sensitive: false
+  validates_uniqueness_of :slug, scope:[:dressing_room_id], case_sensitive: false
 
   #index [[:username, Mongo::ASCENDING], [:dressing_room_name, Mongo::ASCENDING], [:name, Mongo::ASCENDING]], unique: true
 

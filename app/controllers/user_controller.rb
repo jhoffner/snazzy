@@ -3,15 +3,8 @@ class UserController < ApplicationController
   # for now all actions in this controller should require authentication
   before_filter :authenticate_user!
 
-  expose :user do
-    id_or_username = params[:id] || params[:user_id] || params[:username]
-    case id_or_username
-      # if the id/username is for the current user, or the id is not provided then use the current user
-      when current_user_id, current_username, nil
-        current_user
-      else
-        User.find_by_id_or_username(id_or_username)
-    end
+  def settings
+
   end
 
   # GET /user
@@ -66,26 +59,6 @@ class UserController < ApplicationController
     end
   end
 
-  def current_user?
-    id_or_username = params[:id] || params[:user_id] || params[:username]
-    case id_or_username
-      # if the id/username is for the current user, or the id is not provided then use the current user
-      when current_user_id, current_username, nil
-        true
-      else
-        false
-    end
-  end
 
-  private
-
-  def check_user_access
-    if current_user? || admin_user?
-      true
-    else
-      render_no_access "user"
-      false
-    end
-  end
 
 end

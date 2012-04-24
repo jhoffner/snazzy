@@ -51,6 +51,14 @@ describe User do
     #end
   end
 
+  describe "helper methods" do
+    it "should show correct display name" do
+      valid_user.full_name.should == "#{valid_user.first_name} #{valid_user.last_name}"
+      valid_user.first_name = ""
+      valid_user.full_name.should == valid_user.last_name
+    end
+  end
+
   describe "facebook integration" do
 
     before do
@@ -62,13 +70,19 @@ describe User do
         "id" => 'fbprofiletestid',
         "email" => 'test@facebook.com'
       }
+
+      User.stub(:new).and_return(new_user)
     end
 
-    it "should be able to create a new user from the profile" do
-      User.stub(:new).and_return(new_user)
+    let(:fb_user) { User.create_from_facebook('fakeaccesstoken') }
 
-      user = User.create_from_facebook('fakeaccesstoken')
-      user.new?.should_not be_true
+    it "should be able to create a new user from the profile" do
+      fb_user.new?.should_not be_true
+    end
+
+    it "should create default dressing rooms" do
+      fb_user.dressing_rooms.any?.should be_true
+      fb_user.dressing_rooms.first.label.should == "Wish List"
     end
   end
 end

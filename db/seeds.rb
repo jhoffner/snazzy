@@ -29,12 +29,20 @@ dr1 = user1.dressing_rooms.create!({
         {
             name: "test item 1",
             url: "http://www.test.com",
-            image_url: "http://www.test.com/image.png"
+            image: {
+                url: "http://www.test.com/image.png",
+                width: 300,
+                height: 400
+            }
         },
         {
             name: "test item 2",
             url: "http://www.test.com",
-            image_url: "http://www.test.com/image2.png"
+            image: {
+                url: "http://www.test.com/image2.png",
+                width: 300,
+                height: 400
+            }
         }
     ]
 })
@@ -46,7 +54,7 @@ outfit1 = dr1.outfits.create!({
   label: 'test outfit 1',
   #user_id: dr1.user_id,
   #username: user1.username,
-  dressing_room_name: dr1.name,
+  dressing_room_slug: dr1.slug,
   items: [
       {
           dressing_room_item_id: dr1.items.first.id

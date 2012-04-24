@@ -4,8 +4,10 @@ describe OutfitItem do
   let(:existing_dressing_room) { DressingRoom.first }
   let(:existing_outfit_item) { existing_dressing_room.outfits.first.items.first }
   let(:new_outfit_item) { existing_outfit_item.outfit.items.new }
-  let(:valid_dressing_room) { Fabricate :dressing_room }
-  let(:valid_outfit_item) { Fabricate(:outfit).items.first }
+  let(:valid_user) { build_valid_user }
+  let(:valid_dressing_room) { valid_user.dressing_rooms.first }
+  let(:valid_outfit) { valid_dressing_room.outfits.first }
+  let(:valid_outfit_item) { valid_outfit.items.first }
 
   describe "check test data" do
     it "should have valid existing and new instances" do

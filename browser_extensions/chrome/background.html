@@ -1,0 +1,23 @@
+<html>
+<head>
+<script>
+	
+	function loadPlugin(){
+		try {
+			//var script = "var js = document.createElement('script');js.src='http://code.jquery.com/jquery-1.5.min.js';document.body.appendChild(js);";
+			var script = "var js = document.createElement('script');js.src='" + chrome.extension.getURL('script.js') + "';document.body.appendChild(js);";
+			//script += "function initMinboxed(){alert(1);var $mb = $('#minboxed');if ($mb.length > 0){$mb.remove();}else{var s = document.createElement('style');s.innerHTML='#canvas_frame{width:80%;} #minboxed {position:absolute;top:0;right:0;height:100%;overflow:hidden;}';document.body.appendChild(s);var e = document.createElement('iframe');e.src='http://localhost:1225/';e.id='minboxed';;document.body.appendChild(e);}}";
+			chrome.tabs.executeScript(null, { code: script });
+		} catch (ex) { alert(ex.message); }
+	}
+	
+  // Called when the user clicks on the browser action.
+	chrome.browserAction.onClicked.addListener(function(){
+		chrome.tabs.executeScript(null, { code: "snazzyActionClick();" });
+	});
+
+	
+
+</script>
+</head>
+</html>

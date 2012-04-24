@@ -7,9 +7,9 @@
         - @presenter.user.errors.full_messages.each do |message|
           li = message
 
-  .field
-    = f.label :username
-    = f.text_field :username
+  -#.field
+  -#  = f.label :username
+  -#  = f.text_field :username
   .field
     = f.label :first_name
     = f.text_field :first_name
@@ -19,7 +19,5 @@
   .field
     = f.label :email
     = f.text_field :email
-  .field
-    = f.label :password
-    = f.text_field :password
+
   .actions = f.submit 'Save'

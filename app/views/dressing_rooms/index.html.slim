@@ -1,2 +1,12 @@
-h1 User::DressingRooms#index
-p Find me in app/views/user/dressing_rooms/index.html.slim
+h3 = "#{user.first_name}'s Dressing Rooms:"
+
+#rooms
+  ul
+    - @rooms.each do |room|
+      li
+        = link_to "#{room.label} (#{room.prepared.items_count || 0} items)", dressing_room_path(room.username, room.slug)
+
+  -#= form_for @new_room, :html => {class: "form-horizontal well"} do |f|
+  -#  = f.control_group :label do
+  -#    = f.text_field :label
+
