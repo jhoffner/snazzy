@@ -1,0 +1,36 @@
+- content_for :javascript do
+  coffee:
+    App.Plugin.initBar()
+
+var id="pageInfo" = {username: session_username}.to_json
+
+#snazzybar.container
+  .row
+    .span12
+      .row.header-row
+        #logo.span2
+
+        #dressing_room_header.span3.offset3
+          h3 Your Dressing Room:
+          select id="dressing_rooms_names"
+            - @rooms.each do |room|
+              option value=room.slug selected=(room == @default_room ? 'selected' : nil)
+                = room.label
+            option Create New Dressing Room
+        #button_panel.span2
+          a.btn.btn-success target="_parent" GET SNAZZY
+
+      #dressing_room_items.photo-area
+        - @rooms.each do |room|
+          .photo-container id="room_#{room.slug}" style="display:#{room == @default_room ? 'block' : 'none'};"
+            var title="roomInfo" = room.slice(:slug, :username, :tags).to_json
+            ul
+              - room.items.where(deleted_at: nil).each do |item|
+                li
+                  var title="itemId" = item.id.to_s.to_json
+                  a target="_parent" href=item.url
+                    img src=item.image.url
+
+            #drag_here DRAG HERE
+
+
