@@ -139,4 +139,20 @@ describe UserController do
     end
   end
 
+  describe "PUT set_recent_room" do
+    it "should successfully change the recent room" do
+      user = User.find(valid_session[:user_id])
+      user.should_not be_nil
+      user.dressing_rooms.count.should > 1
+      user.recent_dressing_room_id = user.dressing_rooms.first.id
+      user.save!
+
+      post :set_recent_room, {id: user.dressing_rooms.last.id.to_s}, valid_session
+      json = JSON.parse(response.body)
+      #json[:success].should be_true
+      user = User.find(valid_session[:user_id])
+      user.recent_dressing_room_id.should eq user.dressing_rooms.last.id
+    end
+  end
+
 end

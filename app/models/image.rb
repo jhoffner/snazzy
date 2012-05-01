@@ -13,4 +13,5 @@ class Image
   validates_presence_of :url, :width, :height
   validates_format_of   :url,
                         :with => URI::regexp(%w(http https))
+
 end

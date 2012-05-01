@@ -5,21 +5,21 @@ class ApplicationController < ActionController::Base
     id_or_username = params[:user_id] || params[:username]
     case id_or_username
       # if the id/username is for the current user, or the id is not provided then use the current user
-      when current_user_id, current_username, nil
-        current_user
+      when session_user_id, session_username, nil
+        session_user
       else
         User.find_by_id_or_username(id_or_username)
     end
   end
 
   ### authentication:
-  helper_method :authenticated?, :current_user, :current_user_id, :current_username, :admin_user?
+  helper_method :authenticated?, :session_user, :session_user_id, :session_username, :admin_user?
 
-  def current_user?
+  def session_user?
     id_or_username = params[:user_id] || params[:username]
     case id_or_username
       # if the id/username is for the current user, or the id is not provided then use the current user
-      when current_user_id, current_username, nil
+      when session_user_id, session_username, nil
         true
       else
         false
@@ -28,26 +28,38 @@ class ApplicationController < ActionController::Base
 
   private
 
-  # ensures that the user has permission to see the resource.
-  def check_user_access
-    if current_user? || admin_user?
+  def check_user_read_access
+    if session_user? || admin_user?
       true
-    elsif user.nil?
-      render_404
-      false
+    elsif authenticate_user!
+      if user.nil?
+        render_404
+        false
+      else
+        render_no_access
+        false
+      end
     else
-      render_no_access
       false
     end
   end
 
+  # ensures that the user has permission to see the resource.
+  def check_user_write_access
+    check_user_read_access
+  end
+
+  def assert_param_presence(name, msg = "#{name} param is missing")
+    raise msg if params[name].blank?
+  end
+
   # ensures that the user is authenticated
-  def authenticate_user!
+  def authenticate_user!(return_to = request.original_url, controller = :session, action = :new)
     if authenticated?
       true
     else
-      session[:return_to] = request.original_url
-      redirect_to controller: :session, action: :new
+      session[:return_to] = return_to
+      redirect_to controller: controller, action: action
       false
     end
   end
@@ -64,37 +76,42 @@ class ApplicationController < ActionController::Base
   end
 
   def login_user(user)
+    # this is the one value we need to retain from the session after we reset it
+    return_to = session[:return_to]
+
     reset_session
-    @current_user = user
+
+    @session_user = user
     session[:user_id] = user.id.to_s
     session[:username] = user.username
     session[:first_name] = user.first_name
     session[:last_name] = user.last_name
+    session[:return_to] = return_to
   end
 
   def logout_user
     reset_session
-    @current_user = nil
+    @session_user = nil
   end
 
   def authenticated?
-    !current_user_id.blank?
+    !session_user_id.blank?
   end
 
-  def current_user
-    @current_user ||= User.find(session[:user_id]) if authenticated?
+  def session_user
+    @session_user ||= User.find(session[:user_id]) if authenticated?
   end
 
-  def current_user_id
+  def session_user_id
     session[:user_id]
   end
 
-  def current_username
+  def session_username
     session[:username]
   end
 
   def admin_user?
-    current_user.admin? if current_user
+    session_user.admin? if session_user
   end
 
   #
@@ -112,17 +129,33 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def render_json_success
+    begin
+      json_hash = {success: true}
+      yield json_hash if block_given?
+      render json: json_hash
+    rescue => ex
+      p "json failure with exception #{ex.to_s}"
+      render_json_failure(ex.message)
+    end
+  end
+
+  def render_json_failure(message = "Unknown error")
+    p "rendering json failure with message: #{message}"
+    render json: {success: false, message: message}
+  end
+
   def render_404
     respond_to do |format|
       format.html { render "shared/404" }
-      format.json { render json: {error: "resource not found"} }
+      format.json { render_json_failure "resource not found" }
     end
   end
 
   def render_no_access()
     respond_to do |format|
       format.html { render "shared/no_access" }
-      format.json { render json: {error: "access denied"} }
+      format.json { render_json_failure "access denied" }
     end
   end
 end

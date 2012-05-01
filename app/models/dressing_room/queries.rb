@@ -6,8 +6,10 @@ class DressingRoom
 
     end
 
-    def find_by_slug(username, slug)
-      DressingRoom.where(username: username, slug: slug).first
+    module ClassMethods
+      def find_by_slug(username, slug)
+        DressingRoom.where(username: username, slug: slug).first
+      end
     end
   end
 end

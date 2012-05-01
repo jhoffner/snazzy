@@ -58,8 +58,11 @@ gem "omniauth-pinterest"
 gem 'koala'
 
 gem 'decent_exposure'
+
 #gem 'warden'
 #gem "sendgrid"
 #gem "twitter_bootstrap_form_for"
 
 #gem 'growl-rspec'
+
+gem "fastimage"

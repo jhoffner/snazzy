@@ -1,0 +1,23 @@
+{
+    "name": "SnazzyRoom Snazzy Side Rail",
+    "version": "1.0",
+    "description": "Toolbar Extension",
+    "background_page" : "background.html",
+    "browser_action": {
+        "name": "Start New Snazzy Room Session",
+        "default_icon": "icon.png"
+    },
+    "content_scripts": [{
+        "matches": ["https://*/*", "http://*/*"],
+        "js": ["jquery-ui-1.8.18.custom.min.js", "jquery-1.7.min.js", "script.js"],
+        "run_at": "document_end"
+    }],
+    "permissions": [
+        "notifications",
+        "debugger",
+        "management",
+        "tabs", "https://*/*", "http://*/*",
+        "http://*.snazzyroom.com/",
+        "http://localhost:3000/"
+    ]
+}

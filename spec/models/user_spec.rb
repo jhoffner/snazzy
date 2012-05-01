@@ -16,6 +16,10 @@ describe User do
       test_validates_uniqueness_of(existing_user, valid_user, :username)
     end
 
+    it "fails with a reserved username" do
+      test_validates_inclusion_of(new_user, :username, %w{plugin search about assets}, %w{valid_name})
+    end
+
     it "fails without first and last name fields" do
       test_validates_presence_of(new_user, :first_name, "first")
       test_validates_presence_of(new_user, :last_name, "last")
@@ -81,8 +85,13 @@ describe User do
     end
 
     it "should create default dressing rooms" do
-      fb_user.dressing_rooms.any?.should be_true
-      fb_user.dressing_rooms.first.label.should == "Wish List"
+      fb_user.dressing_rooms.where(label: 'Wish List').exists?.should be_true
+      fb_user.dressing_rooms.where(label: 'My Closet').exists?.should be_true
+    end
+
+    it "should set the recent_dressing_room to wish list for a new user" do
+      fb_user.recent_dressing_room.should_not be_nil
+      fb_user.recent_dressing_room_id.should_not be_nil
     end
   end
 end

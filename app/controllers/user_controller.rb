@@ -10,14 +10,14 @@ class UserController < ApplicationController
   # GET /user
   # GET /user.json
   def index
-    params[:id] = current_user_id
+    params[:id] = session_user_id
     show
   end
 
   # GET /user/1
   # GET /user/1.json
   def show
-    if check_user_access
+    if check_user_read_access
       respond_to do |format|
         format.html { render :show }
         format.json { render json: user || {} }
@@ -27,7 +27,7 @@ class UserController < ApplicationController
 
   # GET /user/1/edit
   def edit
-    check_user_access
+    check_user_write_access
 
     @presenter = User::EditPresenter.new self
   end
@@ -35,13 +35,15 @@ class UserController < ApplicationController
   # PUT /user/1
   # PUT /user/1.json
   def update
-    respond_to do |format|
-      if user.update_attributes(params[:user])
-        format.html { redirect_to user, notice: 'User was successfully updated.' }
-        format.json { head :no_content }
-      else
-        format.html { render :edit }
-        format.json { render json: user.errors, status: :unprocessable_entity }
+    if check_user_write_access
+      respond_to do |format|
+        if user.update_attributes(params[:user])
+          format.html { redirect_to user, notice: 'User was successfully updated.' }
+          format.json { head :no_content }
+        else
+          format.html { render :edit }
+          format.json { render json: user.errors, status: :unprocessable_entity }
+        end
       end
     end
   end
@@ -49,7 +51,7 @@ class UserController < ApplicationController
   # DELETE /user/1
   # DELETE /user/1.json
   def destroy
-    if check_user_access
+    if check_user_write_access
       user.destroy
 
       respond_to do |format|
@@ -60,5 +62,19 @@ class UserController < ApplicationController
   end
 
 
+  def set_recent_room
+    if check_user_write_access
+      render_json_success do |json|
+        assert_param_presence :id
+        room = DressingRoom.only(:id).find(params[:id])
+        if (room)
+          session_user.set(:recent_dressing_room_id, params[:id])
+        else
+          json[:success] = false
+          json[:message] = "Room id is invalid"
+        end
+      end
+    end
+  end
 
 end

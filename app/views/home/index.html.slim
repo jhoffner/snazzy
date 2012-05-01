@@ -1,4 +1,7 @@
 h1 Home#index
 
 p
-  = link_to 'My Dressing Rooms', dressing_rooms_path(current_username)
+  ul
+    li = link_to 'My Dressing Rooms', dressing_rooms_path(session_username)
+    li = link_to "Bar Plugin", bar_plugin_path
+    li = link_to "Rail Plugin", rail_plugin_path

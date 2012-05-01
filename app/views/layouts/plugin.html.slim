@@ -1,0 +1,19 @@
+doctype 5
+html
+  head
+    = csrf_meta_tag
+    /![if lt IE 9]
+      = javascript_include_tag 'html5'
+    /![endif]
+    = stylesheet_link_tag :application
+
+    = stylesheet_link_tag 'http://fonts.googleapis.com/css?family=Lobster|Lobster+Two'
+    == yield :head
+
+  body id=controller_name class="#{action_name}_action"
+    == yield
+
+    = javascript_include_tag :application
+    = javascript_include_tag :plugin
+    == yield :javascript
+    == yield :foot

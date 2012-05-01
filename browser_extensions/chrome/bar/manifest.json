@@ -1,5 +1,5 @@
 {
-  "name": "SnazzyRoom",
+  "name": "SnazzyRoom Snazzy Bar",
   "version": "1.0",
   "description": "Toolbar Extension",
   "background_page" : "background.html",	
@@ -17,7 +17,7 @@
 	"debugger",
 	"management",
 	"tabs", "https://*/*", "http://*/*",
-	"http://snazzyroom.apphb.com/",
-	"http://localhost:2610/"
+	"http://*.snazzyroom.com/",
+	"http://localhost:3000/"
   ]
 }

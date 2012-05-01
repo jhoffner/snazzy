@@ -6,6 +6,7 @@ module ModelMixins
 
       #### relationships:
       embeds_one :image,    as: :image_owner, cascade_callbacks: true
+      accepts_nested_attributes_for :image
 
       #### fields:
 

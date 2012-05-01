@@ -5,5 +5,13 @@ module Mongoid
     def has_value?(name)
       !self.instance_variable_get("@#{name}").nil?
     end
+
+    def slice(*syms)
+      result = {}
+      syms.each do |sym|
+        result[sym] = self[sym]
+      end
+      result
+    end
   end
 end

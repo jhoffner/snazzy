@@ -1,0 +1,54 @@
+- content_for :javascript do
+  coffee:
+    App.Plugin.initRail()
+
+var#pageInfo = {username: session_username, activeRoomSlug: @default_room.slug}.to_json
+
+#snazzyrail.container
+  .span2
+    .row.header-row
+      #logo.span2
+
+    .row.header-row
+      h3 Your Dressing Room:
+    .row
+      -#select id="dressing_rooms_names"
+      -#  - @rooms.each do |room|
+      -#    option value=room.slug selected=(room == @default_room ? 'selected' : nil)
+      -#      = room.label
+      -#  option Create New Dressing Room
+      ul.nav.nav-pills.nav-stacked
+        li.dropdown.active id="dressing_rooms_names"
+          a.dropdown-toggle data-toggle="dropdown"
+            span = @default_room.label
+            b.caret
+          ul.dropdown-menu
+            - @rooms.each do |room|
+              li
+                var = room.slug.to_json
+                a = room.label
+            li.divider
+            li id="new_room_action"
+              a Create New Room
+            -#li id="manage_room_action" Manage This Dressing Room
+            li id="view_room_action"
+              a View This Room
+            -#li.divider
+            -#  li id="ask_friends_action"
+            -#    a Ask Friends For Help
+        li id="add_page"
+          a
+            -#i.icon-plus-sign
+            | Add Current Page
+
+    #dressing_room_items.row.photo-area
+      - @rooms.each do |room|
+        .photo-container id="room_#{room.slug}" style="display:#{room == @default_room ? 'block' : 'none'};"
+          var title="roomInfo" = room.slice(:slug, :username, :tags, :_id).to_json
+          ul
+            - room.items.all.reverse.each do |item|
+              li
+                var title="itemId" = item.id.to_s.to_json
+                a target="_parent" href=item.url
+                  img src=item.image.url
+

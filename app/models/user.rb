@@ -19,7 +19,7 @@ class User
 
   has_many :outfits, dependent: :delete
 
-  has_one :last_used_dressing_room, class_name: "DressingRoom"
+  belongs_to :recent_dressing_room, class_name: "DressingRoom"
 
   ##### fields:
 
@@ -112,6 +112,14 @@ class User
                                   in: ['s', 'a'],
                                   message: 'invalid user type',
                                   allow_nil: false
+
+  validates_exclusion_of          :username,
+                                  # need to prevent these values since they are used in the url routing structure
+                                  in: %w{search plugin extension api help landing about settings public pub assets name username},
+                                  message: 'is a reserved name'
+
+  validates_format_of             :username,
+                                  with: RegexHelper::NoWhiteSpace
 
   validates_format_of             :email,
                                   with: RegexHelper::EmailFormat

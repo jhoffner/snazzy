@@ -47,6 +47,8 @@ dr1 = user1.dressing_rooms.create!({
     ]
 })
 
+user1.dressing_rooms.create! label: "My Stuff"
+
 Outfit.create_indexes
 OutfitItem.create_indexes
 

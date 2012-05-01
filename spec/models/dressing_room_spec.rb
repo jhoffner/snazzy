@@ -29,6 +29,11 @@ describe DressingRoom do
     it "should have a valid room" do
       valid_room.valid?.should be_true
     end
+
+    it "should not allow slugs with whitespace" do
+      test_valid_value(new_room, :slug, 'slug_value')
+      test_invalid_value(new_room, :slug, 'slug value')
+    end
   end
 
   describe "field setters" do
@@ -82,6 +87,49 @@ describe DressingRoom do
       valid_room.prepared.image.should be_nil
       valid_room.save!
       valid_room.prepared.image.should_not be_nil
+    end
+  end
+
+  describe "valid dressing room item image field" do
+    let(:valid_item) do
+        valid_item = valid_room.items.first
+        valid_item.created_at = Time.now.utc
+        valid_item
+    end
+
+    let(:dup_item) do
+      valid_room.items.new url: valid_item.url, created_at: Time.now.utc + 3.hours, image: valid_item.image.clone
+    end
+
+    describe "validate test data" do
+      it "should have properly set fields" do
+        valid_item.created_at.nil?.should be_false
+        dup_item.created_at.nil?.should be_false
+        valid_item.created_at.should < dup_item.created_at
+
+        valid_item.image.url.blank?.should be_false
+        valid_item.image.url.should == dup_item.image.url
+
+        dup_item.dressing_room.items.select {|item| item.image.url == valid_item.image.url}.count.should == 2
+      end
+
+      it "dup_item.dup_image? should be true" do
+        dup_item.dup_image?.should be_true
+      end
+    end
+
+    it "should validate uniqueness of image.url field" do
+      dup_item.invalid?.should be_true
+      dup_item.errors.should have_key :"image.url"
+
+      dup_item.image.url = "http://www.test.com/valid-url.png"
+
+      dup_item.valid?.should be_true
+    end
+
+    it "should only show invalid errors for the duplicate image and not the original" do
+      dup_item.invalid?.should be_true
+      valid_item.valid?.should be_true
     end
   end
 end

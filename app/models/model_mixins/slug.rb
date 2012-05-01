@@ -19,6 +19,9 @@ module ModelMixins
       #### validations:
       validates_presence_of :slug, :label
 
+      validates_format_of   :slug,
+                            with: RegexHelper::NoWhiteSpace
+
       #### scopes:
 
       scope :slug, lambda {|slug| where(slug: slug) }

@@ -1,0 +1,21 @@
+<html>
+<head>
+<script>
+	
+	function loadPlugin(){
+		try {
+			var script = "var js = document.createElement('script');js.src='" + chrome.extension.getURL('script.js') + "';document.body.appendChild(js);";
+			chrome.tabs.executeScript(null, { code: script });
+		} catch (ex) { alert(ex.message); }
+	}
+	
+  // Called when the user clicks on the browser action.
+	chrome.browserAction.onClicked.addListener(function(){
+		chrome.tabs.executeScript(null, { code: "snazzyRailActionClick();" });
+	});
+
+	
+
+</script>
+</head>
+</html>

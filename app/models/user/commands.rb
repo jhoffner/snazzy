@@ -44,6 +44,14 @@ class User
     def create_default_rooms
       wish_list_name = 'Wish List'
       self.dressing_rooms.create label: wish_list_name unless self.dressing_rooms.any? {|room| room.label == wish_list_name}
+
+      closet_name = 'My Closet'
+      self.dressing_rooms.create label: closet_name unless self.dressing_rooms.any? {|room| room.label == closet_name}
+
+      session_name = "My Cart"
+      session_room = self.dressing_rooms.create label: session_name unless self.dressing_rooms.any? {|room| room.label == session_name}
+      self.recent_dressing_room = session_room if self.recent_dressing_room.nil?
+      self.save!
     end
 
   end

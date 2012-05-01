@@ -5,7 +5,10 @@ html
     /![if lt IE 9]
       = javascript_include_tag 'html5'
     /![endif]
-    = stylesheet_link_tag 'application'
+    = stylesheet_link_tag :application
+
+    = stylesheet_link_tag 'http://fonts.googleapis.com/css?family=Lobster|Lobster+Two'
+    = yield :head
 
   body[id=controller_name class="#{action_name}_action"]
     = render 'layouts/navbar'
@@ -24,5 +27,8 @@ html
 
           = yield
 
-    = javascript_include_tag 'application'
+    = javascript_include_tag :application
+    = javascript_include_tag :main
     /= render "layouts/facebook"
+    = yield :javascript
+    = yield :foot

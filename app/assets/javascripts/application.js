@@ -16,4 +16,8 @@
 //= require can/plugins/can.construct.proxy
 //= require can/plugins/can.construct.super
 //= require can/plugins/can.control.plugin
-//= require_tree .
+//= require bootstrap/bootstrap-dropdown
+//= require application/_polyfills
+//= require application/_underscore_extensions
+//= require application/_jquery_extensions
+//= require application/_base

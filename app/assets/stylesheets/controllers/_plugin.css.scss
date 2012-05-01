@@ -1,0 +1,182 @@
+$dark_back_color: #111;
+$dark_fore_color: #ddd;
+
+$light_back_color: #eee;
+$light_fore_color: #333;
+$sprite: url(/assets/plugin-sprite.png);
+
+#plugin {
+
+  font-family: "Lobster Two";
+  background-color: $light_back_color;
+
+  #logo {
+    width:134px;
+    background:$sprite;
+    height:32px;
+  }
+
+  h3 {
+    line-height:35px;
+    font-weight:normal;
+    color:$light_fore_color;
+  }
+
+  .header-row {height:40px;}
+
+  .nav-pills {
+    font-family: arial;
+
+    > li > a {
+      > b {
+        float:right;
+      }
+
+      > span {
+        margin-right:5px;
+        max-width: 160px;
+      }
+    }
+  }
+
+  #snazzyrail {
+    padding:5px 5px 10px 10px;
+    width: 180px;
+
+    #logo {
+      margin: 5px 0 0 10px;
+    }
+
+    select {
+      width: 160px;
+    }
+
+    .photo-area {
+      background-color:#fff;
+      border:1px soli #ccc;
+      border-radius:4px;
+      -web-kit-border-radius:4px;
+      overflow:hidden;
+      padding:10px;
+
+      div {
+        padding: 0;
+        position:relative;
+
+        ul {
+          margin: 0;
+
+          li {
+            margin-bottom: 10px;
+            margin-right: 10px;
+            float: left;
+            list-style:none;
+
+            img {
+              width: 60px;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  #snazzybar {
+
+    padding:15px 0;
+    color:#6B6B6B;
+
+    #dressing_room_header {
+      width:386px;
+
+      h3 {
+        float:left;
+      }
+      select {
+        float:left;
+        width:232px;
+        margin:5px 0 0 10px;
+      }
+    }
+
+    #stylist_label {
+      div {
+        background:$sprite no-repeat -159px 0;
+        height:32px;
+        width:40px;
+        float:left;
+        margin-right:10px;
+      }
+    }
+
+    #dropdown {}
+
+    .photo-area {
+      margin-top:10px;
+      background-color:#fff;
+      border:1px soli #ccc;
+      border-radius:4px;
+      -web-kit-border-radius:4px;
+      height:92px;
+      overflow:hidden;
+      padding:15px;
+
+      div {
+        overflow-x: auto;
+        padding: 0;
+        position:relative;
+
+        ul {
+          margin: 0;
+          width:10000px;
+
+          li {
+            float:left;
+            margin-right:10px;
+            list-style:none;
+
+            img {
+              height: 92px;
+            }
+          }
+        }
+      }
+    }
+
+    #drag_here {
+      position:absolute;
+      top:38px;
+      left:275px;
+      font-size:17px;
+      font-family:Tahoma;
+      color:#AAA;
+      font-weight:bold;
+      width:130px;
+      text-shadow:0 1px 1px #333;
+      letter-spacing: 3px;
+    }
+
+    #dressing_room_items {}
+    #dressing_room_items.hl {
+      boxShadow: "0 0 11px #FFF";
+      backgroundColor: "#291D4F";
+    }
+
+    #suggestions_items {}
+
+    #button_panel {
+      //padding-top:98px;
+      padding-top:5px;
+      text-align:center;
+    }
+
+    #snazzypop {padding:15px;padding-bottom:0;}
+  }
+}
+
+#plugin.bar_action {border-top:2px solid $light_fore_color;}
+#plugin.rail_action {
+  //border-left:1px solid #999;
+  width:180px;
+  overflow-x: hidden;
+}

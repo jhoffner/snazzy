@@ -1,4 +1,8 @@
 Snazzy::Application.routes.draw do
+  get "plugin/bar"
+
+  get "bar/index"
+
   get "user/settings"
 
   get "session/create"
@@ -25,8 +29,16 @@ Snazzy::Application.routes.draw do
     get "landing" => :landing
   end
 
+  scope path: '/plugin', controller: :plugin do
+    get "bar", as: :bar_plugin
+    get "rail", as: :rail_plugin
+    get "bar_sign_in"
+    get "image_size"
+  end
+
   scope controller: :user do
     get "settings" => :settings
+    post "api/recent_room/:id" => :set_recent_room
   end
 
   #resources :user, :only => [ :show, :edit, :update, :destroy ]
@@ -36,6 +48,8 @@ Snazzy::Application.routes.draw do
 
     scope path: ":username" do
       get ":slug" => :show, as: :dressing_room
+      post ":slug/item" => :create_item, as: :create_dressing_room_item
+      delete ":slug/:id" => :destroy_item, as: :delete_dressing_room_item
     end
   end
 
