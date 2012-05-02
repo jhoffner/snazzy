@@ -200,6 +200,7 @@ DEPENDENCIES
   fastimage
   jquery-rails
   koala
+  linecache19
   mongoid (~> 2.4)
   mongoid-rspec (~> 1.4)
   omniauth
