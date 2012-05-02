@@ -27,7 +27,7 @@ production:
 #  database: <%= ENV['MONGOID_DATABASE'] %>
   host: dbh73.mongolab.com
   port: 27737
-  database: snazzy
+  database: heroku_app4394420
   username: snazzy
   password: sn@zzy435
   autocreate_indexes: true
