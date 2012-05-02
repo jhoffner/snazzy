@@ -35,7 +35,7 @@ end
 
 # To use debugger
 #gem 'ruby-debug19', :require => 'ruby-debug'
-gem 'linecache19'
+
 gem 'ruby-debug19', :require => false, :group => [:development, :test]
 gem 'ruby-debug-base19', :git => 'https://github.com/tribune/ruby-debug-base19.git', :require => false, :group => [:development, :test]
 #gem 'rails-footnotes', '>= 3.7.5.rc4', :group => :development
