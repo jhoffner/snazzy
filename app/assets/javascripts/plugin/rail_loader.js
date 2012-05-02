@@ -63,11 +63,16 @@
                 width: $img.width(),
                 height: $img.height()
             },
-            url: (!ignoreAnchor && anchor.length > 0 && anchor.attr('href') && anchor.attr('href').indexOf('javascript:') < 0) ? anchor.attr('href') : window.location.href
+            url: (!ignoreAnchor && anchor.length > 0 && anchor.attr('href') && anchor.attr('href').indexOf('javascript:') < 0)
+                ? anchor.attr('href')
+                : window.location.href
         };
 
         if (dragData.url.indexOf('/') == 0) {
-            dragData.url = window.location.protocol + '//' + window.location.hostname + ':' + window.location.port + dragData.url;
+            dragData.url = window.location.protocol
+                + '//' + window.location.hostname
+                + ':' + window.location.port
+                + dragData.url;
         }
 
         return dragData;
