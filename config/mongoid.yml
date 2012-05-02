@@ -29,7 +29,14 @@ production:
   port: 27737
   database: heroku_app4394420
   username: snazzy
-  password: sn@zzy435
+  password: snazzy435
+
+#  host: ds033047.mongolab.com
+#  port: 33047
+#  database: snazzy
+#  username: snazzy
+#  password: sn@zzy435
+
   autocreate_indexes: true
   identity_map_enabled: true
   # slaves:
