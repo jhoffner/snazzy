@@ -1,0 +1,39 @@
+development:
+#  host: ds031647.mongolab.com
+#  port: 31647
+  host: localhost
+  database: snazzy_dev
+#  username: snazzy
+#  password: snazzy
+  identity_map_enabled: true
+  autocreate_indexes: true
+
+test:
+#  host: ds031777.mongolab.com
+#  port: 31777
+  host: localhost
+  database: snazzy_test
+#  username: snazzy
+#  password: snazzy
+  identity_map_enabled: true
+  autocreate_indexes: true
+
+# set these environment variables on your prod server
+production:
+#  host: <%= ENV['MONGOID_HOST'] %>
+#  port: <%= ENV['MONGOID_PORT'] %>
+#  username: <%= ENV['MONGOID_USERNAME'] %>
+#  password: <%= ENV['MONGOID_PASSWORD'] %>
+#  database: <%= ENV['MONGOID_DATABASE'] %>
+  host: dbh73.mongolab.com
+  port: 27737
+  database: snazzy
+  username: snazzy
+  password: sn@zzy435
+  autocreate_indexes: true
+  identity_map_enabled: true
+  # slaves:
+  #   - host: slave1.local
+  #     port: 27018
+  #   - host: slave2.local
+  #     port: 27019
