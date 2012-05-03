@@ -63,8 +63,8 @@ Snazzy::Application.configure do
   config.active_support.deprecation = :notify
 
   config.facebook = {
-      app_id: '380464938651688',
-      app_secret: '62cb8916ee287943fa55da681dfb7d7a'
+      app_id: '222468241200066',
+      app_secret: '27d8923162796ccfec3d8632f4b68f3f'
   }
 
 end
