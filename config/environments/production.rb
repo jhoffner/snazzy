@@ -14,7 +14,8 @@ Snazzy::Application.configure do
   # Compress JavaScripts and CSS
   config.assets.compress = true
 
-  # Don't fallback to assets pipeline if a precompiled asset is missed
+  # fallback to assets pipeline if a precompiled asset is missed
+  # TODO: this should be made false at some point
   config.assets.compile = true
 
   # Generate digests for assets URLs
@@ -60,5 +61,10 @@ Snazzy::Application.configure do
 
   # Send deprecation notices to registered listeners
   config.active_support.deprecation = :notify
+
+  config.facebook = {
+      app_id: '380464938651688',
+      app_secret: '62cb8916ee287943fa55da681dfb7d7a'
+  }
 
 end
