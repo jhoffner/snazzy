@@ -1,19 +1,36 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery
 
+  before_filter :check_valid_session
+
   expose :user do
     id_or_username = params[:user_id] || params[:username]
     case id_or_username
       # if the id/username is for the current user, or the id is not provided then use the current user
       when session_user_id, session_username, nil
-        session_user
+        presenter :default, session_user
       else
-        User.find_by_id_or_username(id_or_username)
+        presenter {User.find_by_id_or_username(id_or_username)}
     end
+  end
+
+  def presenter(type = :default, model = nil, attributes = {}, &block)
+    ApplicationPresenter.presenter(self, type, model, attributes, &block)
+  end
+
+  def presenters(type = :default, models = nil, attributes = {}, &block)
+    ApplicationPresenter.presenters(self, type, models, attributes, &block)
   end
 
   ### authentication:
   helper_method :authenticated?, :session_user, :session_user_id, :session_username, :admin_user?
+
+  def check_valid_session
+    if session[:user_id] and session_user.nil?
+      session.clear
+      flash[:warning] = "Your session has expired"
+    end
+  end
 
   def session_user?
     id_or_username = params[:user_id] || params[:username]
@@ -28,12 +45,21 @@ class ApplicationController < ActionController::Base
 
   private
 
-  def check_user_read_access
+  def check_user_read_access(raise_exception = false)
     if session_user? || admin_user?
       true
-    elsif authenticate_user!
+    elsif authenticate_user!(raise_exception: raise_exception)
       if user.nil?
-        render_404
+        if raise_exception
+          raise "Resource not found"
+        else
+          render_404
+        end
+
+        false
+
+      elsif raise_exception
+        raise "User does not have access"
         false
       else
         render_no_access
@@ -45,8 +71,8 @@ class ApplicationController < ActionController::Base
   end
 
   # ensures that the user has permission to see the resource.
-  def check_user_write_access
-    check_user_read_access
+  def check_user_write_access(raise_exception = false)
+    check_user_read_access(raise_exception)
   end
 
   def assert_param_presence(name, msg = "#{name} param is missing")
@@ -54,25 +80,43 @@ class ApplicationController < ActionController::Base
   end
 
   # ensures that the user is authenticated
-  def authenticate_user!(return_to = request.original_url, controller = :session, action = :new)
+  def authenticate_user!(options = {})
+    options.defaults = {
+        return_to: request.original_url,
+        controller: :session,
+        action: :new,
+        raise_exception: false
+    }
+
     if authenticated?
       true
+    elsif options[:raise_exception]
+      raise "User is not authenticated"
     else
-      session[:return_to] = return_to
-      redirect_to controller: controller, action: action
+      session[:return_to] = options[:return_to]
+      redirect_to controller: options[:controller], action: options[:action]
       false
     end
   end
 
-  def authenticate_admin!
-    if authenticate_user! and admin_user?
-      true
-    else
-      session[:return_to] = request.original_url
-      flash[:warning] = "You must be logged in as an admin to perform this action"
-      redirect_to new_session_path
-    end
+  def authenticate_admin!(options = {})
+    options.defaults = {
+        return_to: request.original_url,
+        controller: :session,
+        action: :new,
+        raise_exception: false
+    }
 
+    if authenticated? and admin_user?
+      true
+    elsif options[:raise_exception]
+      raise "User is not authenticated with admin level permissions"
+    else
+      flash[:warning] = "You must be logged in as an admin to perform this action"
+      session[:return_to] = options[:return_to]
+      redirect_to controller: options[:controller], action: options[:action]
+      false
+    end
   end
 
   def login_user(user)

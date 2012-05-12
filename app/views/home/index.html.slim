@@ -1,7 +1,18 @@
 h1 Home#index
 
 p
+  h4 Page Links
   ul
     li = link_to 'My Dressing Rooms', dressing_rooms_path(session_username)
     li = link_to "Bar Plugin", bar_plugin_path
     li = link_to "Rail Plugin", rail_plugin_path
+
+
+p
+  h4 Bookmarklet
+
+  | Drag the
+  a href="javascript:(function(){var%20s%20=%20document.createElement('SCRIPT');s.type%20=%20'text/javascript';s.src%20=%20'http://#{request.host}:#{request.port}/assets/plugin/rail_loader.js.coffee';document.getElementsByTagName('head')[0].appendChild(s);})();"
+    |  Snazzy Bar
+  |  bookmarklet to your bookmarks bar
+

@@ -2,6 +2,10 @@ class User
   module FacebookHelpers
     extend ActiveSupport::Concern
 
+    def fb_profile_img_url
+      "http://graph.facebook.com/#{fb_uid}/picture"
+    end
+
     def load_fb_profile(access_token = nil)
       self.fb_token = access_token unless access_token.blank?
       return false if self.fb_token.blank?
@@ -24,11 +28,11 @@ class User
       # if username is blank (a new record) then we need to generate one
       if self.username.blank?
         # try to use the username from facebook if one is available
-        username = @fb_profile['username'].downcase
+        username = (@fb_profile['username'] || "").downcase
 
         # if a facebook user name was not available then generate one
         if username.blank?
-          self.username = "#{self.first_name}_#{self.last_name}"
+          self.username = "#{self.first_name}_#{self.last_name}".downcase
 
           #unless the name is available as is then a unique id needs to be suffixed to the user name
           unless User.username_available? self.username

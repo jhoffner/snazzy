@@ -60,7 +60,7 @@
             execScript(
                 'var s = document.createElement("SCRIPT");'
                 + 's.type = "text/javascript";'
-                + 's.src = "http://local.snazzyroom.com:3000/assets/plugin/rail_loader.js";'
+                + 's.src = "http://local.snazzyroom.com:3000/assets/plugin/rail_loader.js.coffee";'
                 + 'document.getElementsByTagName("head")[0].appendChild(s);'
             );
 
@@ -104,5 +104,7 @@
 	}
 	
 	initSnazzy();
+
+
 
 })();

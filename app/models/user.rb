@@ -1,6 +1,5 @@
 class User
-  include Mongoid::Document
-  include Mongoid::Timestamps::Created
+  include ModelMixins::RootDocument
   include Mongoid::Timestamps::Updated
 
   include User::Queries

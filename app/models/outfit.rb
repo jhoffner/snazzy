@@ -1,6 +1,5 @@
 class Outfit
-  include Mongoid::Document
-  include Mongoid::Timestamps::Created
+  include ModelMixins::RootDocument
   include ModelMixins::Slug
   include ModelMixins::UserDependant
   include ModelMixins::DressingRoomDependant

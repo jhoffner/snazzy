@@ -1,6 +1,13 @@
 
-.navbar {
+#nav_bar {
+  margin-bottom:0;
+
   .brand {
-    text-transform: uppercase
+    text-transform: uppercase;
+    margin-left: 10px;
+  }
+
+  .navbar-inner {
+    border-radius: 0;
   }
 }

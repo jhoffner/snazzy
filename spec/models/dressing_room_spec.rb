@@ -1,3 +1,4 @@
+
 require 'spec_helper'
 
 describe DressingRoom do
@@ -79,15 +80,47 @@ describe DressingRoom do
       new_room.errors.should_not have_key :slug
     end
 
+  end
+
+  describe "prepare module" do
     it "should create an empty prepared document when created" do
       new_room.prepared.should_not be_nil
     end
 
-    it "should set the prepared.image field on save" do
+    it "should set the prepared.image field on prepare" do
       valid_room.prepared.image.should be_nil
-      valid_room.save!
+      valid_room.prepare
+      valid_room.prepared.image.should_not be_nil
+
+      valid_room.reload
+      valid_room.prepared.image.should_not be_nil
+      valid_room.prepare
+
+      valid_room.reload
       valid_room.prepared.image.should_not be_nil
     end
+
+    it "should be able to be prepared after an item is added" do
+      existing_room.items.create!(url: "http://www.test.com", image: Fabricate.build(:image))
+      existing_room.prepare
+      existing_room.prepared.items_size.should == existing_room.items.size
+    end
+
+    it "should set the prepared items count on save" do
+      valid_room.prepared.items_size.should == 0
+
+      valid_room.items.size.should > 0
+
+      valid_room.prepare
+      valid_room.prepared.items_size.should == valid_room.items.size
+
+      valid_room.reload
+      valid_room.items.build url: "http://www.test.com", image: {url: "http://www.test.com/asdfasdf.png", width: 500, height: 500}
+      valid_room.prepare
+      valid_room.prepared.items_size.should == valid_room.items.size
+
+    end
+
   end
 
   describe "valid dressing room item image field" do
@@ -130,6 +163,11 @@ describe DressingRoom do
     it "should only show invalid errors for the duplicate image and not the original" do
       dup_item.invalid?.should be_true
       valid_item.valid?.should be_true
+    end
+
+    it "should not error when there are no duplicates" do
+      dup_item.image.url = "http://www.test.com/uniqueurl.png"
+      dup_item.valid?.should be_true
     end
   end
 end

@@ -40,7 +40,7 @@ gem 'ruby-debug19', :require => false, :group => [:development, :test]
 gem 'ruby-debug-base19', :git => 'https://github.com/tribune/ruby-debug-base19.git', :require => false, :group => [:development, :test]
 #gem 'rails-footnotes', '>= 3.7.5.rc4', :group => :development
 
-gem "mongoid", "~> 2.4"
+gem "mongoid", "~> 2.4.9"
 gem "bson_ext", "~> 1.6"
 gem "rspec-rails", "~> 2.8", :group => [:development]
 gem "mongoid-rspec", "~> 1.4", :group => :test
@@ -68,3 +68,4 @@ gem 'decent_exposure'
 #gem 'growl-rspec'
 
 gem "fastimage"
+gem "js-routes"

@@ -14,6 +14,46 @@ jQuery.delegate = (selector, eventType, eventData, handler) ->
   $(document).delegate selector, eventType, eventData, handler
   this
 
+jQuery.put = (url, data, success, dataType) ->
+  $.ajax({
+    url: url,
+    data: data,
+    type: 'PUT',
+    success: success,
+    dataType: dataType
+  });
+
+#untested
+jQuery.fn.formData = (name, value) ->
+  if name
+    this.find("##{name}").val(value)
+  else
+    $form = this.filter "form"
+    $form = $form.eq(0)
+    data = {}
+    $form
+      .find "input, textarea, select"
+      .each (i, el) ->
+        if el.name
+          data[el.name] = $(el).val()
+  data
+
+#untested
+jQuery.fn.postForm = (options) ->
+  $forms = this.filter "form"
+  $forms.each (i, form) ->
+    _options = $.extend
+      url: form.url,
+      type: 'POST',
+      data: null,
+      options
+
+    _options.data = $.extend _options.data, $(form).formData
+
+    $.ajax options
+
+  this
+
 jQuery.fn.getVar = (varName, childOnly) ->
   varSelector = "var"
   varSelector += "[title=" + varName + "]"  if varName

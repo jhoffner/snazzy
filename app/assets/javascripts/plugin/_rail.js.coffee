@@ -22,18 +22,28 @@ getActiveRoomEl = ->
 getActiveRoomInfo = ->
   getActiveRoomEl().getVar 'roomInfo'
 
-getActiveRoomBasePostUrl = (itemId = '') ->
+getActiveRoomPath =  (routeName, itemId, activityId) ->
   info = getActiveRoomInfo()
-  "/#{info.username}/#{info.slug}/#{itemId}"
+  route_f = Routes[routeName + "_path"]
+  if activityId
+    route_f info.username, info.slug, itemId, activityId
+  else if itemId
+    route_f info.username, info.slug, itemId
+  else
+    route_f info.username, info.slug
 
 addItem = (data) ->
   $li = $("<li><a target=\"_parent\" href=\"#{data.url}\"><img src=\"#{data.image.url}\" /></a></li>")
   getActiveRoomEl().find("ul").prepend $li
   refreshLayout()
   $.post(
-    getActiveRoomBasePostUrl() + 'item',
-    item: data,
-    (json) -> $li.remove() unless json.success,
+    getActiveRoomPath("create_dressing_room_item")
+    item: data
+    (json) ->
+      if json.success
+        $li.append("<var>\"#{json.item_id}\"</var>")
+      else
+        $li.remove()
     'json'
   )
 
@@ -41,11 +51,12 @@ removeItem = ($img) ->
   $li = $img.closest("li")
 
   $.ajax
-    url: getActiveRoomBasePostUrl($li.getVar())
+    url: getActiveRoomPath("delete_dressing_room_item", $li.getVar())
     type: 'DELETE'
-
-  $li.remove()
-  refreshLayout()
+    success: (json) ->
+      if json.success
+        $li.remove()
+        refreshLayout()
 
 highlightZone = (active) ->
   $el = $("#dressing_room_items")
@@ -61,17 +72,8 @@ highlightZone = (active) ->
 refreshLayout = ->
   highlightZone false
 
-  left = 0
-  $('#dressing_room_items .photo-container:visible li').each (i, el) ->
-    left += $(el).width()
+  #if getActiveRoomEl().find('li').length == 0
 
-  labelWidth = $("#drag_here").width();
-  totalW = $("#dressing_room_items").width()
-  left += ((totalW - left) / 2) - (labelWidth / 3) + 30
-  if (totalW - left > labelWidth)
-    $("#drag_here").show().css "left", left + "px"
-  else
-    $("#drag_here").hide()
 
 postMsg = (msg) ->
   source.postMessage(JSON.stringify(msg), '*');
@@ -102,9 +104,11 @@ handleMessage = (e) ->
       handleDragLeave
       addItem data
 
+
 handleDragStart = (e) ->
-  $el = $(e.target)
-  $removeImg = $el if $el.is("img") and $el.closest("#dressing_room_items").length is 1
+  $target = $(e.target)
+  $img = if $target.is("img") then $target else $target.find("img")
+  $removeImg = if $img.length > 0 and $img.closest("#dressing_room_items").length is 1 then $img else null
 
 handleDragEnter = (e) ->
   highlightZone true
@@ -117,12 +121,45 @@ handleMouseLeave = (e) ->
     removeItem($removeImg)
     $removeImg = null
 
-handleDropdownSelect = (e) ->
+handleRoomSelect = (e) ->
+  $("#dressing_room_items, #add_page_action").show()
+  $("#dressing_room_new").hide();
+
   $el = $(@)
   activateRoom $el.find('a').html(), $el.getVar()
 
 handleNewRoomAction = ->
+  $("#dressing_room_items, #add_page_action").hide()
+  $("#dressing_room_new").show();
+  $('#dressing_room_label').val(''); #make sure to reset any value that the browser may have added
 
+handleCreateRoomAction = ->
+  label = $('#dressing_room_label').val();
+  if label
+    username = getPageData().username
+    $.post "/#{username}/",
+        "item[label]": label,
+        set_recent: true
+        (data) ->
+          if data.success
+            window.location.reload true
+          else
+            alert data.message
+
+handleEmptyRoomAction = ->
+  info = getActiveRoomInfo()
+  if confirm "Are you sure you want to remove all of your items from #{info.label}?"
+    $.put getActiveRoomPath("empty_dressing_room_items"), {}, (data) ->
+      if data.success
+        getActiveRoomEl().find('ul').html('')
+
+handleDeleteRoomAction = ->
+  $.ajax
+    url: getActiveRoomPath("delete_dressing_room"),
+    type: 'DELETE',
+    success: (json) ->
+      if json.success
+        window.location.reload true
 
 handleViewRoomAction = ->
   info = getActiveRoomInfo()
@@ -138,23 +175,29 @@ activateRoom = (label, slug) ->
   info = getActiveRoomInfo();
 
   $("#dressing_rooms_names a.dropdown-toggle span").html(label)
-  $.post("/api/recent_room/#{info._id}/")
+  $.put("/api/recent_room/#{info._id}/")
   refreshLayout()
 
 
 App.Plugin.initRail = ->
-  # setup event listeners
-  window.addEventListener "message", handleMessage, false
-  $("#dressing_room_items").mouseleave(handleMouseLeave)
-  $(window).bind "dragstart", handleDragStart
-  $.delegate "#dressing_rooms_names ul.dropdown-menu li", 'click', handleDropdownSelect
+  $ ->
+    # setup event listeners
+    window.addEventListener "message", handleMessage, false
+    $("#dressing_room_items").mouseleave handleMouseLeave
+    $(document.body).bind "dragstart", handleDragStart
+    $.delegate "#dressing_rooms_names ul.dropdown-menu li.room", 'click', handleRoomSelect
 
 
-  $("#new_room_action").click handleNewRoomAction
-  $("#view_room_action").click handleViewRoomAction
-  $('#add_page').click handleAddPageAction
+    $("#new_room_action").click handleNewRoomAction
+    $("#view_room_action").click handleViewRoomAction
+    $('#empty_room_action').click handleEmptyRoomAction
+    $('#delete_room_action').click handleDeleteRoomAction
 
-  setTimeout refreshLayout, 500
+    $('#add_page_action').click handleAddPageAction
+
+    $('#dressing_room_create_action').click handleCreateRoomAction
+
+    setTimeout refreshLayout, 500
 
 
 

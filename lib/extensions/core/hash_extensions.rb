@@ -13,7 +13,13 @@ class Hash
     self.reverse_merge! hash
   end
 
-  def allow_dynamic
+  # pushes an array into the hash as a key/value pair
+  #def push(arr)
+  #  raise "Invalid argument size - size should equal 2" if arr.size != 2
+  #  self[arr[0]] = arr[1]
+  #end
+
+  def make_dynamic
     self.extend(DynamicAttrs)
   end
 

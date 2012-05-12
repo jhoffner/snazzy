@@ -1,0 +1,52 @@
+.room-item.tile id=item.id.to_s class=item.active_class_name
+  .actions-bar
+    ul
+      li.like title="" class="#{item.session_user_likes? ? "active" : ""}"
+        b
+        div = item.session_user_likes? ? "Liked" : "Like"
+      li.dislike title="" class="#{item.session_user_dislikes? ? "active" : ""}"
+        b
+        div = item.session_user_dislikes? ? "Disliked" : "Don't Like"
+      li.comment title="Add a comment"
+        b
+        div Comment
+
+  figure
+    a href=item.url target="_blank"
+      img src=item.image.url data-width=item.image.width data-height=item.image.height
+
+  .stats-bar
+    ul
+      - if item.prepared!.likes_count > 0
+        li.likes
+          b
+          span = item.prepared.likes_count
+      - if item.prepared.dislikes_count > 0
+        li.dislikes
+          b
+          span = item.prepared.dislikes_count
+      - if item.prepared.comments_count > 0
+        li.comments
+          b
+          span = item.prepared.comments_count
+
+  .activities
+    - item.activities.each_with_index do |activity, i|
+      .activity class="#{i == 0 ? "first" : ""}"
+        a.profile-img
+          img src=activity.user.fb_profile_img_url
+        p
+          = link_to_user
+          - if activity.is_vote?
+            '
+            | #{activity.like? ? "liked it :)" : "didn't' like it :("}
+            - if activity.message
+              div.msg = activity.message
+          - else
+            | : #{activity.message}
+    .activity.new_comment style=css_display_none
+      a.profile-img
+        img src=session_user.fb_profile_img_url
+      p
+        textarea.comment
+        a.btn.btn-small Comment

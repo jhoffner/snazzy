@@ -38,18 +38,41 @@ Snazzy::Application.routes.draw do
 
   scope controller: :user do
     get "settings" => :settings
-    post "api/recent_room/:id" => :set_recent_room
+    put "api/recent_room/:id" => :set_recent_room
   end
 
   #resources :user, :only => [ :show, :edit, :update, :destroy ]
 
   scope controller: :dressing_rooms do
     get ":username" => :index, as: :dressing_rooms
+    post ":username" => :create, as: :create_dressing_room
 
     scope path: ":username" do
       get ":slug" => :show, as: :dressing_room
-      post ":slug/item" => :create_item, as: :create_dressing_room_item
-      delete ":slug/:id" => :destroy_item, as: :delete_dressing_room_item
+      delete ":slug" => :destroy, as: :delete_dressing_room
+
+      scope path: ":slug" do
+        scope path: "api" do
+          put "items/empty" => :empty_items, as: :empty_dressing_room_items
+        end
+
+        scope path: ":item_id" do
+          post "comment" => :create_item_comment, as: :create_dressing_room_item_comment
+          post "like" => :create_item_like, as: :create_dressing_room_item_like
+          delete "like" => :delete_item_like, as: :delete_dressing_room_item_like
+          post "dislike" => :create_item_dislike, as: :create_dressing_room_item_dislike
+          delete "dislike" => :delete_item_dislike, as: :delete_dressing_room_item_dislike
+          get "activity/:activity_id" => :show_item_activity, as: :show_dressing_room_item_activity
+          delete "activity/:activity_id" => :destroy_item_activity, as: :delete_dressing_room_item_activity
+        end
+
+        post "item" => :create_item, as: :create_dressing_room_item
+
+        get ":item_id" => :show_item, as: :show_dressing_room_item
+        delete ":item_id" => :destroy_item, as: :delete_dressing_room_item
+
+      end
+
     end
   end
 

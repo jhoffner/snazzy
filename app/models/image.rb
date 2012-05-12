@@ -1,5 +1,5 @@
 class Image
-  include Mongoid::Document
+  include ModelMixins::EmbeddedDocument
 
   #### relationships:
   embedded_in :image_owner, polymorphic: true

@@ -3,7 +3,7 @@ require 'fastimage'
 class PluginController < ApplicationController
 
   before_filter do |controller|
-    controller.send(:authenticate_user!, bar_plugin_path, :plugin, :bar_sign_in) unless controller.action_name == "bar_sign_in"
+    controller.send(:authenticate_user!, controller: :plugin, action: :bar_sign_in) unless controller.action_name == "bar_sign_in"
   end
 
   def bar
@@ -15,6 +15,10 @@ class PluginController < ApplicationController
   end
 
   def bar_sign_in
+  end
+
+  def install
+
   end
 
   def image_size

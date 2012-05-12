@@ -24,31 +24,44 @@ var#pageInfo = {username: session_username, activeRoomSlug: @default_room.slug}.
             b.caret
           ul.dropdown-menu
             - @rooms.each do |room|
-              li
+              li.room
                 var = room.slug.to_json
                 a = room.label
             li.divider
-            li id="new_room_action"
-              a Create New Room
+
             -#li id="manage_room_action" Manage This Dressing Room
             li id="view_room_action"
-              a View This Room
+              a View this room
+            li id="empty_room_action"
+              a Empty this room
+            li id="delete_room_action"
+              a Delete this room
+            li.divider
+            li id="new_room_action"
+              a Create new room
             -#li.divider
             -#  li id="ask_friends_action"
             -#    a Ask Friends For Help
-        li id="add_page"
+        li id="add_page_action"
           a
             -#i.icon-plus-sign
             | Add Current Page
 
     #dressing_room_items.row.photo-area
       - @rooms.each do |room|
-        .photo-container id="room_#{room.slug}" style="display:#{room == @default_room ? 'block' : 'none'};"
-          var title="roomInfo" = room.slice(:slug, :username, :tags, :_id).to_json
+        .photo-container id="room_#{room.slug}" style=css_display_none_if(room != @default_room)
+          var title="roomInfo" = room.slice(:slug, :username, :tags, :_id, :label).to_json
           ul
-            - room.items.all.reverse.each do |item|
+            - room.items.where(:deleted_at => nil).reverse.each do |item|
               li
                 var title="itemId" = item.id.to_s.to_json
                 a target="_parent" href=item.url
                   img src=item.image.url
+
+    #dressing_room_new.row style=css_display_none
+      label Name your new room:
+      input type="text" id="dressing_room_label" class="span2"
+
+      #dressing_room_create_action.btn-bar
+        button.btn.btn-primary id="create_new_room_btn" Create
 

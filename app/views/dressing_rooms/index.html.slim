@@ -4,7 +4,7 @@ h3 = "#{user.first_name}'s Dressing Rooms:"
   ul
     - @rooms.each do |room|
       li
-        = link_to "#{room.label} (#{room.prepared.items_count || 0} items)", dressing_room_path(room.username, room.slug)
+        = link_to "#{room.label} (#{room.prepared.items_size} items)", dressing_room_path(room.username, room.slug)
 
   -#= form_for @new_room, :html => {class: "form-horizontal well"} do |f|
   -#  = f.control_group :label do

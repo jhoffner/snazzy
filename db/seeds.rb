@@ -20,7 +20,7 @@ user1 = User.create!(
 )
 
 DressingRoom.create_indexes
-DressingRoomItem.create_indexes
+#DressingRoomItem.create_indexes
 
 dr1 = user1.dressing_rooms.create!({
     label: 'Wish List',
@@ -33,7 +33,18 @@ dr1 = user1.dressing_rooms.create!({
                 url: "http://www.test.com/image.png",
                 width: 300,
                 height: 400
-            }
+            }#,
+            #activites: [
+            #    {
+            #        type: 0,
+            #        message: "Test message",
+            #        user_id: user1.id
+            #    },
+            #    {
+            #        type: 1,
+            #        user_id: user1.id
+            #    }
+            #]
         },
         {
             name: "test item 2",
@@ -46,6 +57,11 @@ dr1 = user1.dressing_rooms.create!({
         }
     ]
 })
+
+item1 = dr1.items.first
+
+item1.activities.create! type: 0, message: "Test message", user_id: user1.id
+item1.activities.create! type: 1, user_id: user1.id
 
 user1.dressing_rooms.create! label: "My Stuff"
 

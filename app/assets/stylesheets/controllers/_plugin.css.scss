@@ -7,7 +7,6 @@ $sprite: url(/assets/plugin-sprite.png);
 
 #plugin {
 
-  font-family: "Lobster Two";
   background-color: $light_back_color;
 
   #logo {
@@ -17,6 +16,7 @@ $sprite: url(/assets/plugin-sprite.png);
   }
 
   h3 {
+    font-family: "Lobster Two";
     line-height:35px;
     font-weight:normal;
     color:$light_fore_color;
@@ -45,6 +45,10 @@ $sprite: url(/assets/plugin-sprite.png);
 
     #logo {
       margin: 5px 0 0 10px;
+    }
+
+    #dressing_room_label{
+      width: 150px;
     }
 
     select {
@@ -79,10 +83,14 @@ $sprite: url(/assets/plugin-sprite.png);
         }
       }
     }
+
+    .btn-bar {
+      margin-top:10px;
+    }
   }
 
   #snazzybar {
-
+    font-family: "Lobster Two";
     padding:15px 0;
     color:#6B6B6B;
 

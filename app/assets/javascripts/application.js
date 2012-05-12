@@ -10,6 +10,7 @@
 // WARNING: THE FIRST BLANK LINE MARKS THE END OF WHAT'S TO BE PROCESSED, ANY BLANK LINE SHOULD
 // GO AFTER THE REQUIRES BELOW.
 //
+//= require js-routes
 //= require jquery
 //= require underscore
 //= require can/can.jquery
@@ -17,7 +18,10 @@
 //= require can/plugins/can.construct.super
 //= require can/plugins/can.control.plugin
 //= require bootstrap/bootstrap-dropdown
+//= require bootstrap/bootstrap-modal
+//= require jquery.wookmark
 //= require application/_polyfills
 //= require application/_underscore_extensions
 //= require application/_jquery_extensions
 //= require application/_base
+

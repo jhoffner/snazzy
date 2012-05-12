@@ -1,2 +1,12 @@
-h1 User::DressingRooms#show
-p Find me in app/views/user/dressing_rooms/show.html.slim
+- content_for :javascript do
+  coffee:
+    $ -> App.DressingRooms.showInit()
+
+h2 #{room.user.first_name}'s "#{room.label}" Dressing Room
+h4 There are #{room.items.size} items in this room
+
+#tiles_container style=css_display_none
+  var title="room_info" = room.var_data.to_json
+  - room.items.each do |item|
+    == room.render_room_item_tile item
+

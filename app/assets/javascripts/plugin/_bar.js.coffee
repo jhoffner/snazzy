@@ -27,7 +27,9 @@ addItem = (data) ->
   $.post(
     getActiveRoomBasePostUrl() + 'item',
     item: data,
-    (json) -> $li.remove() unless json.success,
+    (json) ->
+      $li.remove() unless json.success
+    ,
     'json'
   )
 

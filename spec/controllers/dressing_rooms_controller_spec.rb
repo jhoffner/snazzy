@@ -16,32 +16,35 @@ describe DressingRoomsController do
     end
   end
 
-  describe "GET 'edit'" do
+  describe "POST create" do
     it "returns http success" do
-      get 'edit'
+
+      get 'create', {username: existing_user.username, slug: existing_user.dressing_rooms.first.slug, label: "test create label"}, valid_session
       response.should be_success
     end
   end
 
-  describe "GET 'update'" do
-    it "returns http success" do
-      get 'update'
+  describe "PUT empty_items" do
+    let :room do
+      existing_user.dressing_rooms.first
+    end
+
+    it "returns success" do
+      put 'empty_items', {username: existing_user.username, slug: room.slug}, valid_session
       response.should be_success
     end
-  end
 
-  describe "GET 'create'" do
-    it "returns http success" do
-      get 'create'
-      response.should be_success
+    it "results in all items being deleted" do
+
+      room.items.size.should > 0
+      #room.items.deleted.size.should == 0
+
+      put 'empty_items', {username: existing_user.username, slug: room.slug}, valid_session
+
+      room.reload
+      #room.items.deleted.size.should == room.items.size
+      room.items.size.should == 0
     end
-  end
 
-  describe "GET 'delete'" do
-    it "returns http success" do
-      get 'delete'
-      response.should be_success
-    end
   end
-
 end

@@ -3,14 +3,14 @@
 @import "common/bootstrap_fixes";
 @import "common/mixins";
 
-#shell {margin-top:20px;}
-
 @import "common/base";
 //@import "common/devise";
 @import "common/navbar";
 @import "common/form";
+@import "common/dialogs";
 
 @import "controllers/home";
 @import "controllers/user";
 @import "controllers/session";
 @import "controllers/plugin";
+@import "controllers/dressing_rooms";

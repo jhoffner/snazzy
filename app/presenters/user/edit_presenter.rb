@@ -1,8 +1,4 @@
 
-class User::EditPresenter < ApplicationPresenter
+class User::EditPresenter < User::Presenter
   delegate :user, :to => :controller
-
-  def setup
-
-  end
 end

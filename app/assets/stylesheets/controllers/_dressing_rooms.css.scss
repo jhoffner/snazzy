@@ -1,0 +1,217 @@
+
+#dressing_rooms {
+
+  #tiles_container {
+
+    $tilePadding: 10px;
+    $tileContentWidth: 178px;
+
+    margin-top:15px;
+    position:relative;
+
+    li { list-style: none; }
+
+    div.tile {
+
+      @include box-shadow(0 1px 2px rgba(34, 25, 25, 0.4));
+      padding: $tilePadding;
+      padding-bottom: 0;
+      width: $tileContentWidth;
+      position:absolute;
+
+      figure {
+        margin: 0;
+
+        img {
+          max-width: $tileContentWidth;
+        }
+      }
+
+      .actions-bar {
+        position:absolute;
+        top:0px;
+        left:0px;
+        width: $tileContentWidth + ($tilePadding * 2);
+        height:50px;
+        background-color:#fff;
+        display:none;
+        border-bottom:1px solid #f7f7f7;
+
+        li {
+          height: 50px;
+          width: ceil(($tileContentWidth / 3) + ($tilePadding / 2));
+          top: 0;
+          position: absolute;
+          cursor: pointer;
+          font-size: 10px;
+
+          b {
+            background: url(/assets/dri-tile-actions.png) no-repeat;
+            width: 20px;
+            height: 20px;
+            top: 8px;
+            left: 24px;
+            display: block;
+            position: relative;
+          }
+
+          div {
+            margin-top:5px;
+            left:0;
+            //width: $tileContentWidth / 3;
+            text-align: center;
+            color: #888;
+          }
+        }
+
+        li:hover {background-color:#F6F6F6;}
+
+        li.comment {
+          left: 133px;
+
+          b {
+          }
+        }
+
+        li.comment.active {
+          background-color: #eee;
+        }
+
+        li.like {
+          left: 0;
+          b {
+            background-position: -35px 0;
+          }
+        }
+
+        $activeBgColor: #D2EFD2;
+        li.like.active {
+           background-color: $activeBgColor;
+        }
+
+        li.like.active:hover {
+          background-color: darken($activeBgColor, 5%);
+        }
+
+        li.dislike {
+          left: 66px;
+
+          b {
+            background-position: -72px 0;
+          }
+        }
+
+        $dislikeBgColor: #EFD2D3;
+        li.dislike.active {
+          background-color: $dislikeBgColor;
+        }
+
+        li.dislike.active:hover {
+          background-color: darken($dislikeBgColor, 5%);
+        }
+
+      }
+
+      .stats-bar {
+        @include clearfix;
+
+        padding-top: 4px;
+        ul { margin:0; }
+
+        li {
+          float: left;
+          padding: 2px 14px 2px 0;
+          line-height: 8px;
+
+          b {
+            background: url(/assets/dri-tile-actions-sm.png) no-repeat;
+            width:10px;
+            height:12px;
+            display: block;
+            float: left;
+          }
+
+          span {
+            color: #999;
+            font-size: 10px;
+            padding-left: 4px;
+          }
+        }
+
+        li.likes b {
+          background-position: -24px 0;
+        }
+
+        li.dislikes b {
+          background-position: -46px 0;
+        }
+
+        li.comments b {
+          width: 12px;
+        }
+      }
+
+      .activities {
+        clear: both;
+        margin-top: 5px;
+        //background-color: #eee;
+
+        .activity {
+          @include clearfix;
+          padding: 8px 0;
+          border-top: 1px solid #e7e7e7;
+
+          a.profile-img {
+            float: left;
+            img {
+              width: 30px;
+              height: 30px;
+            }
+          }
+          p {
+            float: left;
+            width: 138px;
+
+            color: #666;
+            font-size:12px;
+            padding-left: 10px;
+            margin: 0;
+
+            a {
+              color: #667;
+              font-weight: bold;
+            }
+          }
+
+          textarea {
+            width: 128px;
+            height:30px;
+            line-height:14px;
+            font-size:11px;
+          }
+
+          a.btn {
+            float:right;
+          }
+        }
+
+        //.activity.first {
+        //  border-top: 0;
+        //}
+      }
+    }
+
+    div.tile.likes {
+      border-top:3px solid green;
+    }
+
+    div.tile.dislikes {
+      border-top: 3px solid darken(red, 20%);
+    }
+
+    div.tile:hover .actions-bar {
+      display: block;
+    }
+
+  }
+}
