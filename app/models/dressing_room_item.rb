@@ -48,7 +48,7 @@ class DressingRoomItem
     self.errors[:"image.url"] = 'Image url has already been added to this collection' if self.dup_image?
   end
 
-  def _prepare
+  def _prepare(options)
     prepared.likes_count = activities.likes.count
     prepared.dislikes_count = activities.dislikes.count
     prepared.comments_count = activities.comments.count

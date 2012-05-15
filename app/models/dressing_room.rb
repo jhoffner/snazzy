@@ -44,11 +44,17 @@ end
 class DressingRoomPrepared
   include ModelMixins::PreparedDocument
 
-  embeds_one :image
+  embeds_one :main_image, class_name: "Image", as: :owner#, inverse_of: :image_owner, validate: false
+  embeds_many :thumb_images, class_name: "Image", as: :owner#, inverse_of: :image_owner, validate: false
+  embeds_many :latest_activities, class_name: "DressingRoomItemActivity"
 
   #### fields:
 
   field :items_size,   type: Integer, default: 0
 
+  #### methdos:
+  def add_latest_activity(activity)
+    # todo: used for adding single activity items inline instead of through the full prepare_activity method
+  end
 end
 

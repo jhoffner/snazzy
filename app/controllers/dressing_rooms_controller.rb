@@ -2,32 +2,33 @@ class DressingRoomsController < ApplicationController
   # for now all actions in this controller should require authentication
   before_filter :authenticate_user!, :check_room_read_access
 
-  expose :room do
-    if params[:slug]
-      presenter { DressingRoom.find_by_slug(params[:username], params[:slug]) }
-    else
-      nil
-    end
+  #expose :room_model do
+  #  if params[:slug]
+  #    DressingRoom.find_by_slug(params[:username], params[:slug])
+  #  else
+  #    nil
+  #  end
+  #end
+
+  expose_presenter :room do
+    DressingRoom.find_by_slug(params[:username], params[:slug]) if params[:slug]
   end
 
-  expose :room_item do
-    if params[:item_id] and room
-      presenter {room.items.find(params[:item_id]) }
-    else
-      nil
-    end
+  expose_presenter :room_item do
+    room.items.find(params[:item_id]) if params[:item_id] and room
   end
 
-  expose :room_item_activity do
-    if params[:activity_id] and room_item
-      presenter {room_item.activities.find(params[:activity_id]) }
-    else
-      nil
-    end
+  expose_presenter :room_item_activity do
+    room_item.activities.find(params[:activity_id]) if params[:activity_id] and room_item
+  end
+
+  expose_presenters :rooms do
+    DressingRoom.where(user_id: session_user_id)
   end
 
   def index
-    @rooms = presenters {DressingRoom.where(user_id: session_user_id) }
+    # initialize the rooms presenters with the index type
+    rooms(:index)
       #.only(:slug, :label, :username, :prepared)
   end
 
@@ -56,13 +57,30 @@ class DressingRoomsController < ApplicationController
     end
   end
 
-  def show_item
-    @room_item = presenter(:tile) {room.items.find(params[:item_id]) }
+  def show_dev
+    authenticate_admin!
+  end
 
+  def prepare_dressing_rooms
+    if authenticate_admin!
+      session_user.dressing_rooms.invoke :prepare, prepare_all: true
+      redirect_to dev_dressing_room_path(params[:username])
+    end
+  end
+
+  def prepare_dressing_room
+    if authenticate_admin!
+      room.prepare prepare_all: true
+      render inline: "Success"
+    end
+  end
+
+  def show_item
     render partial: 'dressing_rooms/tiles/room_item', locals: {
-        item: presenter(:tile, room_item)
+        item: room_item(:tile)
     }
   end
+
 
   def create_item
     render_json_success do |json|
@@ -117,8 +135,9 @@ class DressingRoomsController < ApplicationController
 
       existing.delete if existing and activity.is_vote? and existing.type != activity.type
 
-      room_item.prepare true
       room_item.save!
+
+      room_item.prepare
     end
   end
 

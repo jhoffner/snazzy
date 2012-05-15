@@ -3,7 +3,10 @@ class Hash
   attr_reader :defaults
 
   #usage: options.defaults = name: "default name", id: 0
-  def defaults=(hash)
+  def defaults=(hash, replace_existing_defaults = false)
+    if @defaults and !replace_existing_defaults
+      @defaults.merge! hash
+    end
     @defaults = hash
 
     #hash.each do |key,value|

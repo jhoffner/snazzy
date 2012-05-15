@@ -5,7 +5,7 @@ module ModelMixins
     included do
       include ModelMixins::EmbeddedDocument
 
-      embedded_in name.sub("Prepared", "").underscore.to_sym
+      embedded_in name.sub("Prepared", "").underscore.to_sym, inverse_of: :prepared, validate: false
 
       field :prepared_at,   type: Time
     end

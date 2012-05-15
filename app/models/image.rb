@@ -2,7 +2,7 @@ class Image
   include ModelMixins::EmbeddedDocument
 
   #### relationships:
-  embedded_in :image_owner, polymorphic: true
+  embedded_in :owner, polymorphic: true
 
   #### fields:
   field :url,           type: String

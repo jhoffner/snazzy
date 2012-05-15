@@ -3,23 +3,65 @@ class ApplicationController < ActionController::Base
 
   before_filter :check_valid_session
 
-  expose :user do
+  class << self
+
+    # @param [Symbol] name
+    # @param [Block] block
+    def expose_presenter(name, default_type = :default, &block)
+      _expose_presenter_or_presenters(:presenter, name, default_type, &block)
+    end
+
+    # @param [Symbol] name
+    # @param [Block] block
+    def expose_presenters(name, default_type = :default, &block)
+      _expose_presenter_or_presenters(:presenters, name, default_type, &block)
+    end
+
+    private
+
+    def _expose_presenter_or_presenters(method_name, name, default_type, &block)
+      default_exposure = begin self.default_exposure rescue nil end
+      define_method name do |type = default_type, attributes = {}|
+        @_resources ||= {}
+        @_resources.fetch(name) do
+          model = if block_given?
+                    instance_eval(&block)
+                  else
+                    instance_exec(name, &default_exposure)
+                  end
+
+          @_resources[name] = send method_name, type, model, attributes
+        end
+      end
+
+      define_method "#{name}=".to_sym do |value|
+        @_resources ||= {}
+        @_resources[name] = value
+      end
+
+      helper_method name
+      hide_action name
+    end
+
+  end
+
+  expose_presenter :user do
     id_or_username = params[:user_id] || params[:username]
     case id_or_username
       # if the id/username is for the current user, or the id is not provided then use the current user
       when session_user_id, session_username, nil
-        presenter :default, session_user
+        session_user
       else
-        presenter {User.find_by_id_or_username(id_or_username)}
+        User.find_by_id_or_username(id_or_username)
     end
   end
 
-  def presenter(type = :default, model = nil, attributes = {}, &block)
-    ApplicationPresenter.presenter(self, type, model, attributes, &block)
+  def presenter(type = nil, model = nil, attributes = {}, &block)
+    ApplicationPresenter.presenter(self, determine_presenter_type(type), model, attributes, &block)
   end
 
-  def presenters(type = :default, models = nil, attributes = {}, &block)
-    ApplicationPresenter.presenters(self, type, models, attributes, &block)
+  def presenters(type = nil, models = nil, attributes = {}, &block)
+    ApplicationPresenter.presenters(self, determine_presenter_type(type), models, attributes, &block)
   end
 
   ### authentication:
@@ -44,6 +86,14 @@ class ApplicationController < ActionController::Base
   end
 
   private
+
+  def determine_presenter_type(type)
+    #types = [action_name.to_sym, :default]
+    #types.unshift(type) if type
+    #types
+
+    type || :default
+  end
 
   def check_user_read_access(raise_exception = false)
     if session_user? || admin_user?

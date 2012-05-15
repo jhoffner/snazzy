@@ -15,7 +15,7 @@ user1 = User.create!(
     last_name: "doe",
     email: "jon.doe@gmail.com",
     username: "jon_doe",
-    user_type: 's',
+    role: 's',
     fb_uid: "jondoefbuid"# not a valid id but it should still validate for now
 )
 
@@ -52,7 +52,7 @@ dr1 = user1.dressing_rooms.create!({
             image: {
                 url: "http://www.test.com/image2.png",
                 width: 300,
-                height: 400
+                height: 300
             }
         }
     ]

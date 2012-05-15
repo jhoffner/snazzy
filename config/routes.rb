@@ -48,13 +48,25 @@ Snazzy::Application.routes.draw do
     post ":username" => :create, as: :create_dressing_room
 
     scope path: ":username" do
+      get "dev" => :show_dev, as: :dev_dressing_room
+
+      scope path: "dev" do
+        get "prepare" => :prepare_dressing_rooms, as: :dev_prepare_dressing_rooms
+      end
+
       get ":slug" => :show, as: :dressing_room
       delete ":slug" => :destroy, as: :delete_dressing_room
 
       scope path: ":slug" do
+        get "dev/prepare" => :prepare_dressing_room, as: :dev_prepare_dessing_room
+        post "item" => :create_item, as: :create_dressing_room_item
+
         scope path: "api" do
           put "items/empty" => :empty_items, as: :empty_dressing_room_items
         end
+
+        get ":item_id" => :show_item, as: :show_dressing_room_item
+        delete ":item_id" => :destroy_item, as: :delete_dressing_room_item
 
         scope path: ":item_id" do
           post "comment" => :create_item_comment, as: :create_dressing_room_item_comment
@@ -65,11 +77,6 @@ Snazzy::Application.routes.draw do
           get "activity/:activity_id" => :show_item_activity, as: :show_dressing_room_item_activity
           delete "activity/:activity_id" => :destroy_item_activity, as: :delete_dressing_room_item_activity
         end
-
-        post "item" => :create_item, as: :create_dressing_room_item
-
-        get ":item_id" => :show_item, as: :show_dressing_room_item
-        delete ":item_id" => :destroy_item, as: :delete_dressing_room_item
 
       end
 

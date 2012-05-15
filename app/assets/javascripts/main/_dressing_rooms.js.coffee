@@ -11,6 +11,7 @@ App.DressingRooms =
       @element.show()
 
       @layoutTiles()
+      setTimeout (=> @layoutTiles()), 1000
 
     '.actions-bar li.like click': (li) ->
       @vote li, 'like'
@@ -22,10 +23,10 @@ App.DressingRooms =
       @toggleComment li
 
     '.new_comment a.btn click': (btn) ->
-      submitComment btn
+      @submitComment btn
 
     '.new_comment textarea keypress': (el, e) ->
-      submitComment el if e.keyCode == 13
+      @submitComment el if e.keyCode == 13
 
     submitComment: (el) ->
       helper = @actionHelper el

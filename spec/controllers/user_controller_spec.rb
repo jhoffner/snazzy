@@ -120,7 +120,7 @@ describe UserController do
     end
 
     it "is able to destroy another user because the current user is an admin" do
-      existing_user.user_type = User::ADMIN_USER
+      existing_user.user_type = User::ROLE_ADMIN
 
       existing_count = User.count
 

@@ -40,44 +40,62 @@ class ApplicationPresenter
   end
 
   class << self
-    def presenter(controller, type = :default, model = nil, attributes = {}, &block)
-      # if the model was passed in as the first argument
-      unless type.is_a? Symbol
-        model = type
-        type = :default
-      end
 
-      if block_given?
-        model.merge!(attributes) if model
-        attributes = model || {}
-        model = block.call
-      end
+    def presenter(controller, types = nil, model = nil, attributes = {}, &block)
+
+      types, model, attributes = _process_args(types, model, attributes, &block)
 
       if model
-        model = model.model if model.is_a? ApplicationPresenter # allow other presenters to be passed in
-        presenter_name = "#{type == :default ? "" : type.to_s.classify}Presenter"
-        attributes[:model] = model
-        model.class.const_get(presenter_name).new(controller, attributes)
+        _find_presenter_class(types, model, attributes).new(controller, attributes)
       else
         nil
       end
     end
 
-    def presenters(controller, type = :default, models = nil, attributes = {}, &block)
+    def presenters(controller, type = nil, models = nil, attributes = {}, &block)
+      type, models, attributes = _process_args(type, models, attributes, &block)
+
+      return [] if models.empty?
+
+      klass = _find_presenter_class(type, models.first, attributes)
+      models.collect do |model|
+        attributes[:model] = model
+        klass.new(controller, attributes.clone) if model
+      end
+    end
+
+    private
+
+    def _process_args(type, model_or_models, attributes = {}, &block)
+      type ||= :default
+
+      # if the model was passed in as the first argument
       unless type.is_a? Symbol
-        models = type
+        model_or_models = type
         type = :default
       end
 
       if block_given?
-        models.merge!(attributes) if models
-        attributes = models || {}
-        models = block.call
+        model_or_models.merge!(attributes) if model_or_models
+        attributes = model_or_models || {}
+        model_or_models = block.call
       end
 
-      models.collect do |model|
-        presenter(controller, type, model, attributes)
+      [type, model_or_models, attributes]
+    end
+
+    def _find_presenter_class(type, model, attributes)
+      model = model.model if model.is_a? ApplicationPresenter # allow other presenters to be passed in
+
+      presenter_name = "#{type == :default ? "" : type.to_s.classify}Presenter"
+      attributes[:model] = model
+      begin
+        klass = model.class.const_get(presenter_name)
+        return klass
+      rescue
+        nil
       end
+
     end
   end
 

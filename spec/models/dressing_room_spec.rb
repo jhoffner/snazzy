@@ -87,17 +87,35 @@ describe DressingRoom do
       new_room.prepared.should_not be_nil
     end
 
-    it "should set the prepared.image field on prepare" do
-      valid_room.prepared.image.should be_nil
+    it "should set the prepared.main_image field on prepare" do
+      valid_room.prepared.main_image.should be_nil
       valid_room.prepare
-      valid_room.prepared.image.should_not be_nil
+      valid_room.prepared.main_image.should_not be_nil
 
       valid_room.reload
-      valid_room.prepared.image.should_not be_nil
+      valid_room.prepared.main_image.should_not be_nil
       valid_room.prepare
 
       valid_room.reload
-      valid_room.prepared.image.should_not be_nil
+      valid_room.prepared.main_image.should_not be_nil
+      valid_room.prepare
+
+      valid_room.reload
+      valid_room.prepared.main_image.should_not be_nil
+    end
+
+    it "should set the prepared.thumb_images field on prepare" do
+      valid_room.prepared.thumb_images.size.should == 0
+      valid_room.prepare
+      valid_room.prepared.thumb_images.should_not be_nil
+      valid_room.prepared.thumb_images.empty?.should be_false
+
+      valid_room.reload
+      valid_room.prepared.thumb_images.size.should > 0
+      valid_room.prepare
+
+      valid_room.reload
+      valid_room.prepared.thumb_images.size.should > 0
     end
 
     it "should be able to be prepared after an item is added" do

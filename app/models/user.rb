@@ -9,8 +9,8 @@ class User
 
   #### consts:
 
-  ADMIN_USER = 'a'
-  STANDARD_USER = 's'
+  ROLE_ADMIN = 'a'
+  ROLE_STANDARD = 's'
 
   #### relationships:
 
@@ -66,7 +66,7 @@ class User
   ## Token authenticatable
   # field :authentication_token, :type => String
 
-  field :user_type,               type: String,  default: 's'
+  field :role,               type: String,  default: 's'
 
   field :first_name,              type: String
   field :last_name,               type: String
@@ -107,14 +107,14 @@ class User
                                   message: 'invalid gender',
                                   allow_nil: true
 
-  validates_inclusion_of          :user_type,
+  validates_inclusion_of          :role,
                                   in: ['s', 'a'],
                                   message: 'invalid user type',
                                   allow_nil: false
 
   validates_exclusion_of          :username,
                                   # need to prevent these values since they are used in the url routing structure
-                                  in: %w{search plugin extension api help landing about settings public pub assets name username},
+                                  in: %w{search plugin extension api help landing about settings public pub assets name username dev admin},
                                   message: 'is a reserved name'
 
   validates_format_of             :username,
@@ -173,11 +173,11 @@ class User
   end
 
   def admin?
-    self.user_type == ADMIN_USER
+    self.role == ROLE_ADMIN
   end
 
   def make_admin
-    self.user_type = ADMIN_USER
+    self.role = ROLE_ADMIN
   end
 
 end

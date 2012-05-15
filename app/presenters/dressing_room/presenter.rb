@@ -7,10 +7,6 @@ class DressingRoom
       data
     end
 
-    #def items
-    #  @items ||= presenters :default, model.items
-    #end
-
     def render_room_item_tile(item)
       view_context.render partial: 'dressing_rooms/tiles/room_item', locals: {
           item: presenter(:tile, item)

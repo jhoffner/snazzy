@@ -10,17 +10,27 @@ module ModelMixins
       end
     end
 
-    def prepare(ignore_save = false)
-      if !prepared
+    def prepare(options = {}, &block)
+      options.defaults = {
+          save: true,
+          prepare_all: false # setting this option will cause any prepare processing options normally set to false to true
+      }
+
+      if prepared.nil?
         self.prepared = build_prepared
       elsif prepared.frozen?
         self.prepared = prepared.dup
       end
 
-      self._prepare
+      if block_given?
+        block.call
+      else
+        _prepare(options)
+      end
 
       prepared.prepared_at = Time.now
-      self.prepared.save unless ignore_save
+
+      self.prepared.save if options[:save]
       prepared
     end
 
@@ -29,7 +39,7 @@ module ModelMixins
     end
 
     def prepared!
-      prepare(new?) unless prepared?
+      prepare(save: !new?) unless prepared?
       prepared
     end
 
