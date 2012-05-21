@@ -57,10 +57,11 @@
             $(".snazzy-body-container").css("margin-right", "180px");
         }
         else{
+            window.snazzyUrl = 'blooming-winter-9847.herokuapp.com'
             execScript(
                 'var s = document.createElement("SCRIPT");'
                 + 's.type = "text/javascript";'
-                + 's.src = "http://blooming-winter-9847.herokuapp.com/assets/plugin/rail_loader.js";'
+                + 's.src = "http://' + window.snazzyUrl + '/assets/plugin/rail_loader.js";'
                 + 'document.getElementsByTagName("head")[0].appendChild(s);'
             );
 
