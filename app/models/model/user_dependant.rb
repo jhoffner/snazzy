@@ -1,4 +1,4 @@
-module ModelMixins
+module Model
   module UserDependant
     extend ActiveSupport::Concern
 

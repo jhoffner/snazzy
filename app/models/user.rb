@@ -1,5 +1,5 @@
 class User
-  include ModelMixins::RootDocument
+  include Model::RootDocument
   include Mongoid::Timestamps::Updated
 
   include User::Queries
@@ -14,11 +14,13 @@ class User
 
   #### relationships:
 
-  has_many :dressing_rooms, dependent: :delete, autosave: true
+  has_many :dressing_rooms,       dependent: :delete, autosave: true
 
-  has_many :outfits, dependent: :delete
+  has_many :outfits,              dependent: :delete
 
-  belongs_to :recent_dressing_room, class_name: "DressingRoom"
+  belongs_to :recent_dressing_room, class_name: "DressingRoom", validate: false
+  has_and_belongs_to_many :friends, class_name: "User", inverse_class_name: "User", validate: false
+  has_and_belongs_to_many :collaborating_dressing_rooms, class_name: "DressingRoom"
 
   ##### fields:
 
@@ -66,7 +68,7 @@ class User
   ## Token authenticatable
   # field :authentication_token, :type => String
 
-  field :role,               type: String,  default: 's'
+  field :role,                    type: String,  default: 's'
 
   field :first_name,              type: String
   field :last_name,               type: String
@@ -130,8 +132,6 @@ class User
   index                           :fb_uid, unique: true, sparse: true
 
   #### attributes
-
-  attr_accessor                   :fb_profile
 
   #### methods
 

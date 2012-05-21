@@ -1,4 +1,4 @@
-module ModelMixins
+module Model
   module WebLink
     extend ActiveSupport::Concern
 

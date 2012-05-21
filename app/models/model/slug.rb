@@ -1,4 +1,4 @@
-module ModelMixins
+module Model
   module Slug
     extend ActiveSupport::Concern
 

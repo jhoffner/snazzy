@@ -13,7 +13,7 @@ class User
 
         if auth_hash[:provider] == 'facebook'
           if user
-            user.fb_token = access_token if !access_token.blank?
+            user.update_user_attrs_using_fb(access_token)
           else
             # TODO: implement invite process instead of just creating a new user automatically
             # early return since this method will create the user - no need to save
@@ -35,6 +35,7 @@ class User
         user.save!
 
         user.create_default_rooms
+        user.discover_and_link_fb_friend_users
         user
       end
 
@@ -54,5 +55,38 @@ class User
       self.save!
     end
 
+    def add_friend(user)
+      user_id = user.is_a?(User) ? user.id : user
+
+      self.add_to_set(:friend_ids, user_id)
+      User.add_to_set({_id: user_id}, {friend_ids: self.id})
+
+      @stale = true
+    end
+
+    def is_friends_with?(user)
+      if self.friend_ids.include? user.id
+        true
+      elsif is_fb_friends_with?(user.fb_uid)
+        add_friend(user)
+        true
+      else
+        false
+      end
+    end
+
+    #def add_friends(users)
+    # TODO: should use add_to_set combined with a $in selector
+    #end
+
+    def create_room(attributes, options = {})
+      options.defaults = {
+          set_recent: true
+      }
+      room = dressing_rooms.create(attributes)
+      room.prepare(prepare_all: true)
+
+      set(:recent_dressing_room_id, room.id) if options[:set_recent]
+    end
   end
 end

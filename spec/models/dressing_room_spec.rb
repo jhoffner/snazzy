@@ -3,6 +3,7 @@ require 'spec_helper'
 
 describe DressingRoom do
 
+  let(:valid_user) { Fabricate.build :user }
   let(:new_room) { DressingRoom.new }
   let(:existing_room) { DressingRoom.first }
   let(:valid_room) { build_valid_user.dressing_rooms.first }
@@ -78,6 +79,31 @@ describe DressingRoom do
 
       new_room.valid?.should be_true
       new_room.errors.should_not have_key :slug
+    end
+
+  end
+
+  describe "validate DAO commands" do
+    describe "invite_fb_uids" do
+      it "should add invited fb users to invited list" do
+        fb_uid = "test_fb_uid"
+
+        existing_room.invited_fb_uids.should be_nil
+        existing_room.invite_fb_uid(fb_uid)
+
+        existing_room.invited_fb_uids.include?(fb_uid).should be_true
+        existing_room.reload
+        existing_room.invited_fb_uids.include?(fb_uid).should be_true
+
+      end
+
+      it "should add invited fb users as collaborators are already on the site" do
+        valid_user.save!
+        existing_room.invite_fb_uid(valid_user.fb_uid)
+        existing_room.reload
+        existing_room.collaborators.any?.should be_true
+        existing_room.collaborators.any? {|c| c.user_id == valid_user.id}.should be_true
+      end
     end
 
   end

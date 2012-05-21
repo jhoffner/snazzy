@@ -21,7 +21,20 @@ class ApplicationPresenter
 
   def method_missing(method, *args, &block)
     if model and model.respond_to? method
-      model.send method, *args, &block
+      val = model.send method, *args, &block
+
+      # if the value is an array then we want to extend that instance of the array to have a presenters method
+      if val.is_a? Array and !val.respond_to? :presenters
+        parent = self
+        val.define_singleton_method :presenters do |type = nil, attributes = {}|
+          type ||= :default
+          @__presenters ||= {}
+          @__presenters.fetch(type) do
+            parent.presenters(type, self, attributes)
+          end
+         end
+      end
+      val
     #elsif controller.view_context.respond_to? method
     #  controller.view_context.send method, *args, &block
     else

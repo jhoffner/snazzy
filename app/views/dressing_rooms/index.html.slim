@@ -1,22 +1,24 @@
-h3 = "#{user.first_name}'s Dressing Rooms:"
+h3 #{user.first_name}'s Dressing Rooms:
 
 #rooms.tiles-collections
   ul
     - rooms.each do |room|
       li.collection
-        figure
-          - unless room.main_image_url.blank?
-            img src=room.main_image_url
-        div
-          ul
-            - room.prepared.thumb_images.each do |image|
-              - if image
-                li.thumb
-                  img data-width=image.width data-height=image.height src=image.url
-              - else
-                li.blank
-
-        = link_to "#{room.label} (#{room.prepared.items_size} items)", dressing_room_path(room.username, room.slug)
+        h3 = link_to "#{room.label}", dressing_room_path(room.username, room.slug)
+        h4 #{room.prepared.items_size} items
+        div.collection
+          = link_to "", dressing_room_path(room.username, room.slug)
+          figure
+            - unless room.main_image_url.blank?
+              img src=room.main_image_url
+          div
+            ul
+              - room.thumb_images.each do |image|
+                - if image
+                  li.thumb
+                    img data-width=image["width"] data-height=image["height"] src=image["url"]
+                - else
+                  li.blank
 
   -#= form_for @new_room, :html => {class: "form-horizontal well"} do |f|
   -#  = f.control_group :label do

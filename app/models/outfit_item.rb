@@ -1,5 +1,5 @@
 class OutfitItem
-  include ModelMixins::EmbeddedDocument
+  include Model::EmbeddedDocument
 
   #### fields:
   field :dressing_room_item_id,   type: BSON::ObjectId

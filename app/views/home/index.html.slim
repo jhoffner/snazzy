@@ -1,12 +1,17 @@
-h1 Home#index
+h1 Welcome To SnazzyRoom
+h4 This is a prototype version of the product.
 
 p
   h4 Page Links
   ul
     li = link_to 'My Dressing Rooms', dressing_rooms_path(session_username)
-    li = link_to "Bar Plugin", bar_plugin_path
-    li = link_to "Rail Plugin", rail_plugin_path
+    /li = link_to "Bar Plugin", bar_plugin_path
+    /li = link_to "Rail Plugin", rail_plugin_path
 
+p
+  h3 Getting Started
+  | The following sections will help you get started with SnazzyRoom. If you are using Chrome you can install the extension - otherwise drag the bookmarklet
+    to your browser's bookmarks bar.
 
 p
   h4 Bookmarklet
@@ -15,4 +20,10 @@ p
   a href="javascript:(function(){var%20s%20=%20document.createElement('SCRIPT');s.type%20=%20'text/javascript';s.src%20=%20'http://#{request.host}:#{request.port}/assets/plugin/rail_loader.js.coffee';document.getElementsByTagName('head')[0].appendChild(s);})();"
     |  Snazzy Bar
   |  bookmarklet to your bookmarks bar
+
+p
+  h4 Chrome Extension
+  a href="/assets/downloads/rail.crx" Click here
+  '
+  | to download the Chrome extension. After downloading check your downloads folder to install the extension.
 

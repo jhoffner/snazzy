@@ -1,12 +1,43 @@
 - content_for :javascript do
   coffee:
-    $ -> App.DressingRooms.showInit()
+    $ -> App.pageController = new App.DressingRooms.ShowController $("#dressing_rooms")
 
-h2 #{room.user.first_name}'s "#{room.label}" Dressing Room
-h4 There are #{room.items.size} items in this room
+#page_header
+  .title
+    h2 #{room.user.first_name}'s "#{room.label}" Dressing Room
+    h4 There are #{room.items.size} items in this room
+  /.fb-like
+  /  fb:like href=request.url send="false" width="280"
 
-#tiles_container style=css_display_none
-  var title="room_info" = room.var_data.to_json
-  - room.items.each do |item|
-    == room.render_room_item_tile item
+
+  #control_panel
+    .addthis_toolbox.addthis_default_style
+      a.addthis_button_preferred_1
+      a.addthis_button_preferred_2
+      a.addthis_button_preferred_3
+      javascript:
+        var addthis_config = {"data_track_addressbar":true};
+      script src="http://s7.addthis.com/js/250/addthis_widget.js#pubid=ra-4fb6dab467cb38c9"
+    /a id="action_add_contributors" Share this room
+    /'
+    .fb-send data-href=request.url
+    .fb-send-msg Send this page to your friends so that they can help you decide!
+
+#page_content
+  #tiles_container style=css_display_none
+    var title="room_info" = room.var_data.to_json
+    - room.items.each do |item|
+      == room.render_room_item_tile item
+
+  .fb-comments data-href=request.url data-num-posts="2" data-width="300"
+
+#friends_modal.modal.hide
+  .modal-header
+    button.close data-dismiss="modal" x
+    h3 Choose friends to share your room with
+  .modal-body
+    #jfmfs_container
+  .modal-footer
+    a.btn data-dismiss="modal" Cancel
+    a.btn.btn-primary Done
 

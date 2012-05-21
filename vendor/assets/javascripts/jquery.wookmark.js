@@ -14,6 +14,7 @@ $.fn.wookmark = function(options) {
         this.wookmarkOptions = $.extend( {
             container: $('body'),
             offset: 2,
+            animate: 0,
             autoResize: false,
             itemWidth: $(this[0]).outerWidth(),
             resizeDelay: 50
@@ -79,12 +80,19 @@ $.fn.wookmark = function(options) {
                 }
             }
 
-            // Postion the item.
-            item.css({
+            css = {
                 position: 'absolute',
                 top: shortest+'px',
                 left: (shortestIndex*columnWidth + offset)+'px'
-            });
+            };
+
+            // Postion the item.
+            if (this.wookmarkOptions.animate > 0){
+                item.animate(css, this.wookmarkOptions.animate);
+            }
+            else{
+                item.css(css);
+            }
 
             // Update column height.
             heights[shortestIndex] = shortest + item.outerHeight() + this.wookmarkOptions.offset;

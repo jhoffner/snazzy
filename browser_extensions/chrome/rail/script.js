@@ -42,7 +42,7 @@
 	}
 	
 	function activateSnazzy(){
-        if (window.location.hostname.indexOf("snazzyroom") > 0){
+        if (window.location.hostname.indexOf("herokuapp") > 0 || window.location.hostname.indexOf('snazzyroom') > 0){
             return;
         }
 
@@ -60,7 +60,7 @@
             execScript(
                 'var s = document.createElement("SCRIPT");'
                 + 's.type = "text/javascript";'
-                + 's.src = "http://local.snazzyroom.com:3000/assets/plugin/rail_loader.js.coffee";'
+                + 's.src = "http://blooming-winter-9847.herokuapp.com/assets/plugin/rail_loader.js";'
                 + 'document.getElementsByTagName("head")[0].appendChild(s);'
             );
 

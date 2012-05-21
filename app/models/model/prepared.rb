@@ -1,4 +1,4 @@
-module ModelMixins
+module Model
   module Prepared
     extend ActiveSupport::Concern
 
@@ -8,11 +8,14 @@ module ModelMixins
       after_initialize do
         self.prepared = build_prepared unless self.prepared
       end
+
     end
 
     def prepare(options = {}, &block)
+
       options.defaults = {
           save: true,
+          prepare_defaults: true,
           prepare_all: false # setting this option will cause any prepare processing options normally set to false to true
       }
 
@@ -20,6 +23,7 @@ module ModelMixins
         self.prepared = build_prepared
       elsif prepared.frozen?
         self.prepared = prepared.dup
+        #self.prepared = prepared.class.new
       end
 
       if block_given?
@@ -30,9 +34,12 @@ module ModelMixins
 
       prepared.prepared_at = Time.now
 
+      prepared.serialize_doc_attributes
+
       self.prepared.save if options[:save]
       prepared
     end
+
 
     def prepared?
       prepared and prepared.prepared?

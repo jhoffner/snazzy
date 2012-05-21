@@ -1,10 +1,13 @@
 class DressingRoomItem
-  include ModelMixins::EmbeddedDocument
-  include ModelMixins::Prepared
-  include ModelMixins::WebLink
+  include Model::EmbeddedDocument
+  include Model::Prepared
+  include Model::WebLink
 
   #include Mongoid::Paranoia
   include Mongoid::Timestamps::Created
+
+  include DressingRoomItem::Commands
+  include DressingRoomItem::Prepare
 
   #### relationships:
 
@@ -47,17 +50,10 @@ class DressingRoomItem
   def validate_uniqueness_of_new_image_url
     self.errors[:"image.url"] = 'Image url has already been added to this collection' if self.dup_image?
   end
-
-  def _prepare(options)
-    prepared.likes_count = activities.likes.count
-    prepared.dislikes_count = activities.dislikes.count
-    prepared.comments_count = activities.comments.count
-  end
-
 end
 
 class DressingRoomItemPrepared
-  include ModelMixins::PreparedDocument
+  include Model::PreparedDocument
 
   #### fields:
   field :likes_count,       type: Integer, default: 0
@@ -67,7 +63,7 @@ class DressingRoomItemPrepared
 end
 
 class DressingRoomItemActivity
-  include ModelMixins::EmbeddedDocument
+  include Model::EmbeddedDocument
   include Mongoid::Timestamps::Created
 
   #### consts
@@ -83,7 +79,7 @@ class DressingRoomItemActivity
 
   #### fields:
 
-  field :message,           type: String
+  field :message,           type: String, limit: 200
   field :type,              type: Integer, required: true
 
   #### validations:

@@ -95,10 +95,8 @@ class ApplicationController < ActionController::Base
     type || :default
   end
 
-  def check_user_read_access(raise_exception = false)
-    if session_user? || admin_user?
-      true
-    elsif authenticate_user!(raise_exception: raise_exception)
+  def handle_user_no_access(raise_exception = false)
+    if authenticate_user!(raise_exception: raise_exception)
       if user.nil?
         if raise_exception
           raise "Resource not found"
@@ -115,8 +113,14 @@ class ApplicationController < ActionController::Base
         render_no_access
         false
       end
+    end
+  end
+
+  def check_user_read_access(raise_exception = false)
+    if session_user? || admin_user?
+      true
     else
-      false
+      handle_user_no_access(raise_exception)
     end
   end
 
@@ -233,6 +237,8 @@ class ApplicationController < ActionController::Base
       render_json_failure(ex.message)
     end
   end
+
+  alias :render_json :render_json_success
 
   def render_json_failure(message = "Unknown error")
     p "rendering json failure with message: #{message}"

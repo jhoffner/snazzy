@@ -22,8 +22,17 @@ class Hash
   #  self[arr[0]] = arr[1]
   #end
 
-  def make_dynamic
-    self.extend(DynamicAttrs)
+  def make_dynamic(cascade = false)
+    self.extend(DynamicAttrs) unless is_a? DynamicAttrs
+
+    if cascade
+      self.each do |key, val|
+        if val.is_a? Hash
+          val.make_dynamic cascade
+        end
+      end
+    end
+
   end
 
   module DynamicAttrs

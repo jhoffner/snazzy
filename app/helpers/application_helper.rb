@@ -20,7 +20,7 @@ module ApplicationHelper
 
   ### link helpers
   def link_to_user(user = session_user, always_use_full_name = false)
-    label = (authenticated? and session_user.id == user.id and !always_use_full_name) ? "You" : user.full_name
+    label = (authenticated? and session_user_id == user.id.to_s and !always_use_full_name) ? "You" : user.full_name
     link_to label, dressing_rooms_path(user.username)
   end
 

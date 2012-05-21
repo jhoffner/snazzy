@@ -66,8 +66,7 @@ class UserController < ApplicationController
     if check_user_write_access
       render_json_success do |json|
         assert_param_presence :id
-        room = DressingRoom.only(:id).find(params[:id])
-        if (room)
+        if DressingRoom.where(_id: params[:id]).exists?
           session_user.set(:recent_dressing_room_id, params[:id])
         else
           json[:success] = false

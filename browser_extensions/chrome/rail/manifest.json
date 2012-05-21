@@ -1,5 +1,5 @@
 {
-    "name": "SnazzyRoom Snazzy Side Rail",
+    "name": "Snazzy Bar",
     "version": "1.0",
     "description": "Toolbar Extension",
     "background_page" : "background.html",
@@ -17,6 +17,7 @@
         "debugger",
         "management",
         "tabs", "https://*/*", "http://*/*",
+        "http://*.herokuapp.com/",
         "http://*.snazzyroom.com/",
         "http://localhost:3000/"
     ]

@@ -63,6 +63,32 @@ describe User do
     end
   end
 
+  describe "DAO commands" do
+
+    describe "add_friend" do
+      it "should add friend id to both users" do
+        valid_user.save!
+        existing_user.add_friend(valid_user)
+        existing_user.stale?.should be_true
+        existing_user.reload
+        valid_user.reload
+
+        existing_user.friend_ids.include?(valid_user.id).should be_true
+        valid_user.friend_ids.include?(existing_user.id).should be_true
+      end
+
+      it "should not add friend id if it is already added" do
+        valid_user.save!
+        existing_user.add_friend(valid_user)
+        existing_user.reload
+        existing_user.add_friend(valid_user)
+        existing_user.reload
+        existing_user.friends.size.should == 1
+      end
+    end
+
+  end
+
   describe "facebook integration" do
 
     before do

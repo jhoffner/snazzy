@@ -1,4 +1,6 @@
 Snazzy::Application.routes.draw do
+  get "facebook/friends_picker"
+
   get "plugin/bar"
 
   get "bar/index"
@@ -63,6 +65,7 @@ Snazzy::Application.routes.draw do
 
         scope path: "api" do
           put "items/empty" => :empty_items, as: :empty_dressing_room_items
+          post "invite_fb_users" => :invite_fb_users
         end
 
         get ":item_id" => :show_item, as: :show_dressing_room_item

@@ -1,8 +1,8 @@
 class Outfit
-  include ModelMixins::RootDocument
-  include ModelMixins::Slug
-  include ModelMixins::UserDependant
-  include ModelMixins::DressingRoomDependant
+  include Model::RootDocument
+  include Model::Slug
+  include Model::UserDependant
+  include Model::DressingRoomDependant
 
   include Outfit::Queries
 

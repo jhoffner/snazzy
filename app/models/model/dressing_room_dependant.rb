@@ -1,4 +1,4 @@
-module ModelMixins
+module Model
   module DressingRoomDependant
     extend ActiveSupport::Concern
 
@@ -17,7 +17,7 @@ module ModelMixins
         if value
           self.dressing_room_slug = value.slug
 
-          if self.is_a? ModelMixins::UserDependant
+          if self.is_a? Model::UserDependant
             self.username = value.username
             self.user_id = value.user_id
             #self.user = value.instance_variable_get('@user') # get the cached version only

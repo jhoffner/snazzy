@@ -1,5 +1,5 @@
 class Image
-  include ModelMixins::EmbeddedDocument
+  include Model::EmbeddedDocument
 
   #### relationships:
   embedded_in :owner, polymorphic: true

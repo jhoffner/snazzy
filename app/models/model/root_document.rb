@@ -1,9 +1,9 @@
-module ModelMixins
+module Model
   module RootDocument
     extend ActiveSupport::Concern
 
     included do
-      include ModelMixins::Document
+      include Model::Document
       include Mongoid::Timestamps::Created
     end
 

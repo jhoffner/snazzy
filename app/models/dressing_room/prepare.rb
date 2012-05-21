@@ -5,7 +5,7 @@ class DressingRoom
     protected
     def _prepare(options)
       options.defaults = {
-          prepare_images: true,
+          prepare_images: options[:prepare_default],
           prepare_latest_activities: options[:prepare_all]
       }
 
@@ -37,7 +37,7 @@ class DressingRoom
       end
 
       # if the most optimal image could not be found then try a more lenient criteria
-      unless prepared.main_image
+      unless main_image
         r_items.each do |item|
           if item.image.width >= 150 and item.image.height > 80
             main_image = item.image
@@ -47,22 +47,19 @@ class DressingRoom
       end
 
       # if the 2nd most optimal image could not be found then just use the latest image
-      unless prepared.main_image
+      unless main_image
         main_image = r_items.first.image
       end
 
       r_items.each do |item|
         if item.image.width > 40
-          thumb_images << item.image if prepared.main_image != item.image
-          break if thumb_images.size > 2
+          thumb_images << item.image if main_image != item.image
+          break if thumb_images.size > 3
         end
       end
 
-      prepared.save
-      prepared.set_main_image(main_image)
-      prepared.save
+      prepared.main_image = main_image
       prepared.thumb_images = thumb_images
-      prepared.save
     end
   end
 end

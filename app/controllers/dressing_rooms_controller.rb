@@ -27,33 +27,36 @@ class DressingRoomsController < ApplicationController
   end
 
   def index
+    render_404 if user.nil?
     # initialize the rooms presenters with the index type
     rooms(:index)
       #.only(:slug, :label, :username, :prepared)
   end
 
   def show
+    render_404 if room.nil?
   end
 
   def create
     render_json_success do |json|
-      check_room_write_access(true)
+      check_room_admin_access(true)
 
       item_data = params[:item]
-
-      room = session_user.dressing_rooms.create(item_data.slice :label)
-
-      if params[:set_recent]
-        session_user.set(:recent_dressing_room_id, room.id)
-      end
+      user.create_room(item_data.slice :label, set_recent: params[:set_recent])
     end
   end
 
-
   def destroy
     render_json_success do
-      check_room_write_access(true)
+      check_room_admin_access(true)
       room.delete!
+    end
+  end
+
+  def invite_fb_users
+    render_json_success do
+      check_room_admin_access(true)
+      room.invite_fb_uids(params[:fb_uids])
     end
   end
 
@@ -84,7 +87,7 @@ class DressingRoomsController < ApplicationController
 
   def create_item
     render_json_success do |json|
-      check_room_write_access(true)
+      check_room_admin_access(true)
 
       item_data = params[:item]
       raise "missing required data" unless item_data
@@ -99,6 +102,7 @@ class DressingRoomsController < ApplicationController
 
   def destroy_item
     render_json_success do
+      check_room_admin_access(true)
       room_item.delete
       room.prepare
     end
@@ -106,7 +110,7 @@ class DressingRoomsController < ApplicationController
 
   def empty_items
     render_json_success do
-      check_room_write_access(true)
+      check_room_admin_access(true)
 
       room.items.delete_all
       room.prepare
@@ -114,30 +118,21 @@ class DressingRoomsController < ApplicationController
   end
 
   def create_item_comment
-    create_item_activity :build_comment
+    create_item_activity :comment
   end
 
   def create_item_like
-    create_item_activity :build_like
+    create_item_activity :like
   end
 
   def create_item_dislike
-    create_item_activity :build_dislike
+    create_item_activity :dislike
   end
 
-  def create_item_activity(scope)
+  def create_item_activity(type_name)
     render_json_success do
       check_room_write_access(true)
-      existing = room_item.activities.user(session_user).votes.first
-
-      activity = room_item.activities.send scope, params[:activity] || {}
-      activity.user = session_user
-
-      existing.delete if existing and activity.is_vote? and existing.type != activity.type
-
-      room_item.save!
-
-      room_item.prepare
+      room_item.create_activity(type_name, session_user, params[:activity])
     end
   end
 
@@ -151,27 +146,34 @@ class DressingRoomsController < ApplicationController
     destroy_item_activity
   end
 
-
-
   def destroy_item_activity
     render_json_success do
-      check_room_write_access(true)
+      handle_user_no_access(true) unless admin_user? || session_user_id == room_item_activity.user.id
+
+      raise "User not authorized to delete this item" unless room_item_activity.user.id == session_user_id
 
       room_item_activity.delete
       room_item.prepare
     end
   end
 
-
-
   private
 
   def check_room_read_access(raise_exception = false)
-    check_user_read_access(raise_exception)
+    if session_user? || admin_user? || user.is_friends_with?(session_user)
+      return true
+    else
+      handle_user_no_access(raise_exception)
+    end
   end
 
   # placeholder for when more complicated room privileges are implemented
   def check_room_write_access(raise_exception = false)
+    check_room_read_access(raise_exception)
+  end
+
+  def check_room_admin_access(raise_exception = false)
     check_user_write_access(raise_exception)
   end
+
 end

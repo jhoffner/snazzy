@@ -1,0 +1,30 @@
+
+#friends_modal {
+  .modal-body { padding: 1px; }
+
+  #jfmfs-friend-selector {
+    width: 558px;
+    height: 320px;
+
+    a.filter-link {
+      margin: 0 6px;
+    }
+
+  }
+
+  #jfmfs-inner-header {
+    padding: 5px;
+
+    .jfmfs-title { padding:0 5px; }
+  }
+
+  #jfmfs-friend-container {
+    height: 284px;
+
+    .jfmfs-friend { width: 165px;}
+  }
+
+  #jfmfs-friend-filter-text { margin: 0; padding: 0 4px;}
+}
+
+

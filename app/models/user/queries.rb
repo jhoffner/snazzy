@@ -2,9 +2,10 @@ class User
   module Queries
     extend ActiveSupport::Concern
 
-    #included do
-    #  scope :find_by_username,
-    #end
+    included do
+      scope :username, lambda {|username| where(username: username) }
+      scope :fb_uids, lambda {|fb_uids| where(:fb_uid.in => fb_uids) }
+    end
 
     module ClassMethods
       def find_by_username(username)

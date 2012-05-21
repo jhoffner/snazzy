@@ -31,19 +31,19 @@
           span = item.prepared.comments_count
 
   .activities
-    - item.activities.each_with_index do |activity, i|
-      .activity class="#{i == 0 ? "first" : ""}"
+    - item.activities.presenters.each do |activity|
+      .activity
         a.profile-img
           img src=activity.user.fb_profile_img_url
         p
-          = link_to_user
+          = link_to_user(activity.user)
           - if activity.is_vote?
             '
-            | #{activity.like? ? "liked it :)" : "didn't' like it :("}
+            = activity.label
             - if activity.message
               div.msg = activity.message
           - else
-            | : #{activity.message}
+            = activity.label
     .activity.new_comment style=css_display_none
       a.profile-img
         img src=session_user.fb_profile_img_url
