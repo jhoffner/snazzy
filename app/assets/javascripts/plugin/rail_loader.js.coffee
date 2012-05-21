@@ -9,7 +9,7 @@ do ->
   # local alias existing jquery if it exists on the page
   $ = window.jQuery
 
-  snazzyUrl = window.snazzyUrl or "local.snazzyroom.com:3000"
+  snazzyUrl = window.snazzyUrl or "http://blooming-winter-9847.herokuapp.com/"
   snazzyWidth = 180
   jQueryLoading = false
 
