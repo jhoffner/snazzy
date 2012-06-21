@@ -5,9 +5,16 @@
   .brand {
     text-transform: uppercase;
     margin-left: 10px;
+
+    img {height:30px;margin: -10px 0;}
   }
 
   .navbar-inner {
     border-radius: 0;
+    @include gradient-vertical(#CCC, #FFF);
+
+    color: #000;
+
+    .nav > li > a {color:#222;}
   }
 }

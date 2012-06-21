@@ -59,7 +59,7 @@
         else{
 
             execScript(
-                'window.snazzyUrl = "blooming-winter-9847.herokuapp.com";'
+                'window.snazzyUrl = "snazzyroom.herokuapp.com";'
                 + 'var s = document.createElement("SCRIPT");'
                 + 's.type = "text/javascript";'
                 + 's.src = "http://" + window.snazzyUrl + "/assets/plugin/rail_loader.js";'

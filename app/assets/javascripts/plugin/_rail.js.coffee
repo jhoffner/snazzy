@@ -6,9 +6,13 @@ $removeImg = null
 pageData = null
 source = null
 
-gotoUrl = (relativeUrl) ->
+gotoUrl = (relativeUrl, newWindow) ->
   port = if window.location.port is 80 then '' else ":#{window.location.port}"
-  top.location.href = "http://#{window.location.hostname}#{port}#{relativeUrl}"
+  url = "http://#{window.location.hostname}#{port}#{relativeUrl}"
+  if newWindow
+    window.open url, "_blank"
+  else
+    top.location.href = url
 
 getPageData = ->
   pageData ||= $.parseJSON $("#pageInfo").html()
@@ -163,7 +167,7 @@ handleDeleteRoomAction = ->
 
 handleViewRoomAction = ->
   info = getActiveRoomInfo()
-  gotoUrl "/#{info.username}/#{info.slug}"
+  gotoUrl "/#{info.username}/#{info.slug}", true
 
 handleAddPageAction = ->
   postMsg eventName: "add_current_page"

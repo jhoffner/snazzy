@@ -9,4 +9,8 @@ class HomeController < ApplicationController
     render "landing"
   end
 
+  def tos
+
+  end
+
 end

@@ -34,7 +34,7 @@ class User
         user.last_sign_in_at = Time.now
         user.save!
 
-        user.create_default_rooms
+        #user.create_default_rooms
         user.discover_and_link_fb_friend_users
         user
       end

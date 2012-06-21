@@ -17,6 +17,8 @@ Snazzy::Application.routes.draw do
 
   get "session/facebook", as: :facebook_signin
 
+  get "tos" => "home#tos", as: :tos
+
   #devise_for :users
   match '/auth/:provider/callback' => 'session#create'
 

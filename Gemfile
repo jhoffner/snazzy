@@ -1,5 +1,7 @@
 source 'https://rubygems.org'
 
+ruby '1.9.3'
+
 gem 'rails', '3.2.3'
 
 # Bundle edge Rails instead:
@@ -53,6 +55,8 @@ gem "slim-rails"
 #gem "compass_twitter_bootstrap"
 gem "compass"
 gem "compass-rails"
+
+gem "bourbon"
 
 gem "omniauth"
 #gem "devise"

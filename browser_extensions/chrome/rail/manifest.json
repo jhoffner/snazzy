@@ -1,8 +1,17 @@
 {
+    "manifest_version": 2,
     "name": "Snazzy Bar",
-    "version": "1.0",
+    "version": "1.1",
+    "icons": {
+        "16": "icon.png",
+        "48": "icon.png",
+        "128": "icon.png"
+    },
+    "homepage_url": "http://snazzyroom.herokuapp.com",
     "description": "Toolbar Extension",
-    "background_page" : "background.html",
+    "background" : {
+        "page" : "background.html"
+    },
     "browser_action": {
         "name": "Start New Snazzy Room Session",
         "default_icon": "icon.png"
@@ -15,7 +24,6 @@
     "permissions": [
         "notifications",
         "debugger",
-        "management",
         "tabs", "https://*/*", "http://*/*",
         "http://*.herokuapp.com/",
         "http://*.snazzyroom.com/",
