@@ -20,18 +20,7 @@ require 'spec_helper'
 
 describe UserController do
 
-  # This should return the minimal set of attributes required to create a valid
-  # User. As you add validations to User, be sure to
-  # update the return value of this method accordingly.
-  def valid_attributes
-    {
-        username: 'unique_user',
-        first_name: 'test',
-        last_name: 'user',
-        email: 'testuser@test.com',
-        fb_uid: 'testfbid'
-    }
-  end
+
 
   describe "GET index" do
     it "handles the current logged in user and assigns them as user" do
